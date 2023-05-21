@@ -1,0 +1,33 @@
+{
+    "brawlers": [
+      {
+        "nome": "BrawlerA",
+        "vida": 3000,
+        "ataque": 3000,
+        "velocidade": 3000,
+        "super": "superA"
+      },
+      {
+        "nome": "BrawlerB",
+        "vida": 2500,
+        "ataque": 3000,
+        "velocidade": 3000,
+        "super": "superB"
+      },
+      {
+        "nome": "BrawlerC",
+        "vida": 3500,
+        "ataque": 3000,
+        "velocidade": 3000,
+        "super": "superC"
+      },
+      {
+        "nome": "BrawlerD",
+        "vida": 2800,
+        "ataque": 3000,
+        "velocidade": 3000,
+        "super": "superD"
+      }
+    ]
+  }
+      
