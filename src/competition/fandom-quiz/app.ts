@@ -13,14 +13,14 @@ interface Question {
   type: string;
   question: string;
   options: string[];
-  answer: string;
+  answer: Brawler;
+  attribute: string
 }
 
 //Leitura do arquivo
 const pasta = '';
 const nomeArquivo = 'informacoes.json';
 const caminhoArquivo = path.join(__dirname, pasta, nomeArquivo);
-console.log(caminhoArquivo);
 
 //conversão para objeto
 const rawData = fs.readFileSync(caminhoArquivo, 'utf8');
@@ -34,39 +34,83 @@ for (const brawler of brawlers) {
 }
 
 //lista de atributos válidos para perguntas
-const attributes = getBrawlerAttributes(brawlers[0])
+const brawlersValidAttributesList = getBrawlerAttributes(brawlers[0])
                     .filter(item => (item !== 'nome') && (item !== 'super') );
 
+const brawlersDirectValuesList = getBrawlerAttributes(brawlers[0])
+                    .filter(item => item === 'super');
+
+
+// Variáveis globais para controlar as combinações já utilizadas
+let usedBrawlerGroups: Brawler[] = [];
+let usedQuestionTypes: string[] = [];
+let usedAttributes: string[] = [];
+
+const questions: Question[] = [];
 function main() {
-
-  const question = generateRandomQuestion(brawlers);
-
-  console.log('Tipo de Pergunta:', question.type);
-  console.log('Pergunta:', question.question);
-
-  const shuffledOptions = question.options.sort(() => 0.5 - Math.random());
-  const incorrectAnswer = getRandomOption(
-    brawlers
-        .filter(brawler => brawler.nome !== question.answer)
-        .map(brawler => brawler.nome)
-  );
-  shuffledOptions.splice(1, 0, incorrectAnswer);
-
-  console.log('Opções:', shuffledOptions);
-  console.log('Resposta:', question.answer);
+    const numQuestions = 5; // Número de perguntas desejado
+    
+  
+    for (let i = 0; i < numQuestions; i++) {
+      const question = generateUniqueQuestion();
+      questions.push(question);
+    }
+  
+    // Iterar sobre a lista de perguntas
+    for (const question of questions) {
+      console.log('Tipo de Pergunta:', question.type);
+      console.log('Atributo alvo da pergunta:', question.attribute);
+      console.log('Pergunta:', question.question);
+      console.log('Opções:', question.options);
+      console.log('Resposta:', question.answer);
+      console.log('----------------------');
+    }
 }
 
 main();
 
-function generateRandomQuestion(brawlers: Brawler[]): Question {
-  const randomType = Math.random() < 0.5 ? 'attribute' : 'directInfo';
+function generateUniqueQuestion(): Question {
+    let question: Question;
 
-  if (randomType === 'attribute') {
-      return generateAttributeQuestion(brawlers);
-  }
-  else {
-      return generateDirectInfoQuestion(brawlers);
-  }
+    do {
+        question = generateRandomQuestion();
+    }
+    while (isCombinationUsed(question.answer, question.type, question.attribute));
+
+    markCombinationAsUsed(question.answer, question.type, question.attribute);
+
+    return question;
+}
+  
+function isCombinationUsed(selectedBrawler: Brawler, type: string, attribute: string): boolean {
+    const hasUsedBrawlerGroup = usedBrawlerGroups.includes(selectedBrawler);  
+    const hasUsedQuestionType = usedQuestionTypes.includes(type);
+    const hasUsedAttribute = usedAttributes.includes(attribute);
+
+    console.log(selectedBrawler + ' = ' + hasUsedBrawlerGroup );
+    console.log(type + ' = ' + hasUsedQuestionType);
+    console.log(attribute + ' = ' + hasUsedAttribute );
+
+    console.log(questions)
+
+    return hasUsedBrawlerGroup;
+}
+  
+function markCombinationAsUsed(selectedBrawler: Brawler, type: string, attribute: string) {
+    usedBrawlerGroups.push(selectedBrawler);
+    usedQuestionTypes.push(type);
+    usedAttributes.push(attribute);
+}
+
+function generateRandomQuestion(): Question {
+    const randomType = Math.random() < 0.5 ? 'attribute' : 'directInfo';
+
+    if (randomType === 'attribute') {
+        return generateAttributeQuestion(getRandomOption(brawlersValidAttributesList));
+    }
+    else {
+        return generateDirectInfoQuestion(getRandomOption(brawlersDirectValuesList));
+    }
 }
 
 function getRandomOption(options: string[]): string {
@@ -74,19 +118,20 @@ function getRandomOption(options: string[]): string {
   return options[randomIndex];
 }
 
-function generateAttributeQuestion(brawlers: Brawler[]): Question {
-  const attribute = getRandomOption(attributes);
-  const selectedBrawlers = getRandomBrawlers(brawlers, 3);
+function generateAttributeQuestion(attribute): Question {
 
-  const question = `Qual brawler possui ${attribute} maior?`;
-  const options = selectedBrawlers.map(brawler => brawler.nome);
+  const selectedBrawlers = gerarListaDeBrawlersComBrawlerAlvo();
+
+  const question = `Qual brawler possui maior ${attribute}?`;
   const answer = selectedBrawlers.reduce((a, b) => (a[attribute] > b[attribute] ? a : b)).nome;
+  const options = gerarOpcoesComValoresDosAtributosDosBrawlers(selectedBrawlers, 'nome');
 
   return {
     type: 'Perguntas de cruzamento de informação de atributos do brawler',
     question,
     options,
     answer,
+    attribute
   };
 }
 
@@ -94,33 +139,11 @@ function getBrawlerAttributes(brawler: Brawler): string[] {
   return Object.keys(brawler);
 }
 
-function generateDirectInfoQuestion(brawlers: Brawler[]): Question {
-
-  const selectedBrawlers = getRandomBrawlers(brawlers, 1);
+function generateDirectInfoQuestion(attribute): Question {
+  const selectedBrawlers = gerarListaDeBrawlersComBrawlerAlvo();
   const brawler = selectedBrawlers[0];
   const question = `Qual é a habilidade Super do brawler ${brawler.nome}?`;
-
-  const opcoes = [];
-  opcoes.push(brawler.super); // Adiciona a resposta correta
-  const opcoesErradas = valoresAtributosSuper.slice(1).sort(() => 0.5 - Math.random()).slice(0, 3); // Seleciona 3 opções erradas aleatórias
-  opcoes.push(...opcoesErradas); // Adiciona as opções erradas
-
-  // Embaralha as opções corretas e erradas
-  const opcoesEmbaralhadas = shuffle(opcoes);
-
-  // Seleciona as primeiras opções não repetidas
-  const opcoesSelecionadas = [];
-  for (const opcao of opcoesEmbaralhadas) {
-    if (!opcoesSelecionadas.includes(opcao)) {
-      opcoesSelecionadas.push(opcao);
-    }
-
-    if (opcoesSelecionadas.length === 4) {
-      break; // Já foram selecionadas as 4 opções (1 correta e 3 erradas)
-    }
-  }
-
-  const options = opcoesSelecionadas;
+  const options = gerarOpcoesComValoresDosAtributosDosBrawlers(selectedBrawlers, attribute);
   const answer = brawler.super;
 
   return {
@@ -128,6 +151,7 @@ function generateDirectInfoQuestion(brawlers: Brawler[]): Question {
     question,
     options,
     answer,
+    attribute
   };
 }
 
@@ -137,9 +161,26 @@ function shuffle(array: any[]) {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
-}  
+}
 
-function getRandomBrawlers(brawlers: Brawler[], count: number): Brawler[] {
-  const shuffled = brawlers.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
+function gerarOpcoesComValoresDosAtributosDosBrawlers(brawlersSelecionados, atributo) {
+    return brawlersSelecionados.map(brawler => brawler[atributo]);
+}
+
+function gerarListaDeBrawlersComBrawlerAlvo() {
+
+    const brawlersEmbaralhados = shuffle(brawlers);
+    const brawlersSelecionados = [];
+
+    for (const opcao of brawlersEmbaralhados) {
+        if (!brawlersSelecionados.includes(opcao)) {
+            brawlersSelecionados.push(opcao);
+        }
+
+        if (brawlersSelecionados.length === 4) {
+            break; // Já foram selecionadas as 4 opções (1 correta e 3 erradas)
+        }
+    }
+
+    return shuffle(brawlersSelecionados);
 }
