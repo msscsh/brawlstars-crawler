@@ -1,0 +1,67 @@
+Nome	Vida	Dano máximo por munição	Raridade	Range	Velocidade de carregamento	Velocidade de movimento	Tipo
+8-Bit	7200	2880	Super Rare	Very Long	Normal	Very Slow	Damage Dealer
+Amber	4800	12000	Legendary	Long	Very Fast	Normal	Controller
+Ash	8100	1200	Chromatic	Normal	Fast	Normal	Tank
+Barley	3600	2280	Rare	Long	Slow	Normal	Artillery
+Bea	3600	1200	Epic	Very Long	Very Fast	Normal	Marksman
+Belle	3900	1560	Chromatic	Very Long	Fast	Normal	Marksman
+Bibi	6900	2100	Epic	Short	Very Fast	Very Fast	Tank
+Bo	5400	2700	Epic	Long	Normal	Normal	Controller
+Bonnie	7200	1500	Epic	Long	Very Fast	Slow	Marksman
+Brock	3600	1740	Rare	Long	Slow	Normal	Marksman
+Bull	7500	3000	Rare	Normal	Normal	Fast	Tank
+Buster	7200	1980	Chromatic	Normal	Normal	Fast	Tank
+Buzz	6600	3150	Chromatic	Short	Very Fast	Fast	Assassin
+Byron	3600	510	Mythic	Very Long	Fast	Normal	Support
+Carl	6000	1980	Super Rare	Long	Slow	Normal	Damage Dealer
+Chester	4950	2880	Legendary	Long	Normal	Fast	Damage Dealer
+Colette	5100	3885	Chromatic	Long	Normal	Normal	Damage Dealer
+Colt	4200	3240	Rare	Long	Normal	Normal	Damage Dealer
+Crow	3600	1440	Legendary	Long	Fast	Very Fast	Assassin
+Darryl	7950	3600	Super Rare	Normal	Normal	Fast	Tank
+Dynamike	4200	2400	Super Rare	Long	Normal	Fast	Artillery
+Edgar	4200	1620	Epic	Short	Very Fast	Very Fast	Assassin
+El Primo	9000	2160	Rare	Short	Very Fast	Fast	Tank
+Emz	5400	2340	Epic	Normal	Slow	Normal	Controller
+Eve	4350	2340	Chromatic	Very Long	Normal	Normal	Damage Dealer
+Fang	6450	2100	Chromatic	Very Long	Very Fast	Fast	Assassin
+Frank	10500	1860	Epic	Normal	Very Fast	Fast	Tank
+Gale	5400	2520	Chromatic	Long	Very Fast	Normal	Controller
+Gene	5400	1440	Mythic	Very Long	Slow	Normal	Controller
+Gray	4950	1740	Mythic	Long	Fast	Normal	Support
+Griff	5100	3510	Epic	Long	Normal	Normal	Controller
+Grom	4500	1590	Epic	Long	Slow	Normal	Artillery
+Gus	4800	1410	Super Rare	Very Long	Normal	Normal	Support
+Jacky	7500	1860	Super Rare	Short	Normal	Fast	Tank
+Janet	5100	1500	Chromatic	Normal	Normal	Normal	Marksman
+Jessie	4500	1590	Super Rare	Long	Normal	Normal	Controller
+Leon	4800	2880	Legendary	Very Long	Normal	Very Fast	Assassin
+Lola	5700	2340	Chromatic	Long	Normal	Normal	Damage Dealer
+Lou	4800	1980	Chromatic	Very Long	Very Fast	Normal	Controller
+Mandy	4200	1800	Chromatic	Long	Normal	Normal	Marksman
+Max	4800	2040	Mythic	Long	Very Fast	Very Fast	Support
+Meg	3450	900	Legendary	Long	Very Fast	Fast	Tank
+Mortis	5700	1350	Mythic	Short	Very Slow	Very Fast	Assassin
+Mr. P	4500	1140	Mythic	Long	Normal	Normal	Controller
+Nani	3900	3150	Epic	Long	Normal	Normal	Marksman
+Nita	6000	1440	Rare	Normal	Very Fast	Normal	Damage Dealer
+Otis	4800	1980	Chromatic	Long	Normal	Normal	Controller
+Pam	7200	3510	Epic	Long	Very Fast	Normal	Support
+Penny	5400	1410	Super Rare	Long	Slow	Normal	Artillery
+Piper	3600	2280	Epic	Very Long	Very Slow	Normal	Marksman
+Poco	5550	1140	Rare	Long	Normal	Normal	Support
+R-T	6150	1050	Chromatic	Very Long	Normal	Normal	Damage Dealer
+Rico	4200	2400	Super Rare	Very Long	Very Fast	Normal	Damage Dealer
+Rosa	8100	2070	Rare	Short	Very Fast	Fast	Tank
+Ruffs	4200	1680	Chromatic	Long	Fast	Normal	Support
+Sam	8100	2400	Chromatic	Short	Normal	Fast	Assassin
+Sandy	5700	1350	Legendary	Normal	Normal	Fast	Controller
+Shelly	5700	2700	Starting Brawler	Long	Normal	Very Fast	Damage Dealer
+Spike	3600	5040	Legendary	Long	Slow	Normal	Damage Dealer
+Sprout	4500	1470	Mythic	Normal	Normal	Normal	Artillery
+Squeak	5400	1620	Mythic	Long	Slow	Normal	Controller
+Stu	4350	1620	Epic	Long	Normal	Normal	Assassin
+Surge	4200	3540	Chromatic	Normal	Slow	Slow	Damage Dealer
+Tara	4800	1980	Mythic	Long	Slow	Normal	Damage Dealer
+Tick	3300	2880	Super Rare	Long	Very Slow	Normal	Artillery
+Willow	3750	1800	Mythic	Long	Slow	Normal	Controller
