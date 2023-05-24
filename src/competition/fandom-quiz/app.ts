@@ -77,8 +77,6 @@ function generateUniqueQuestion(): Question {
   
 function isCombinationUsed(selectedBrawler: Brawler, type: string, attribute: string): boolean {
     const hasUsedBrawlerGroup = usedBrawlerGroups.includes(selectedBrawler);  
-    // const hasUsedQuestionType = usedQuestionTypes.includes(type);
-    // const hasUsedAttribute = usedAttributes.includes(attribute);
     return hasUsedBrawlerGroup;
 }
   
