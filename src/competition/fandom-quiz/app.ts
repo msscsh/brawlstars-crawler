@@ -2,14 +2,6 @@ import { log } from 'console';
 import fs from 'fs';
 import path from 'path';
 
-// interface Brawler {
-//   nome: string;
-//   vida: number;
-//   ataque: number;
-//   velocidade: string;
-//   super: string;
-// }
-
 interface Brawler {
     'nome': string;
     'vida': number;
@@ -41,7 +33,7 @@ let brawlersValidAttributesList = [];
 let brawlersDirectValuesList = [];
 
 function main() {
-    const numQuestions = 10; // Número de perguntas desejado
+    const numQuestions = 20; // Número de perguntas desejado
     
     for (let i = 0; i < numQuestions; i++) {
       const question = generateUniqueQuestion();
