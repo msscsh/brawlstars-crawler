@@ -7,7 +7,7 @@
     "unpkg": "dist/index.umd.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "rm -rf dist && tsc && copyfiles -u 1 src/competition/fandom-quiz/dados_brawlers.txt dist",
+        "build": "rm -rf dist && tsc && copyfiles -u 1 src/competition/fandom-quiz/dados_brawlers.txt dist && copyfiles -u 1 src/management/lineup/club_data.json dist",
         "run": "node dist/competition/fandom-quiz/app.js"
     },
     "author": "msscash",
