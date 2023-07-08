@@ -1,5 +1,21 @@
+/**
+ * 
+ * This module aims to load values ​​from the API to the three main JSON
+ * files (brawlers, clubs and players)
+ */
+
 function main() {
-    // construction to feed all json files used in application
+    feedClubJSON();
+    feedPlayersJSON();
+}
+
+function feedClubJSON() {
+
+    
+
+}
+
+function feedPlayersJSON() {
 }
 
 main();
