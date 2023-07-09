@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { readLinesInFile, readJSONInFile, createFileWithContent } from '../../commons/functions/files';
 
 interface Brawler {
     'nome': string;
@@ -185,12 +184,7 @@ function createBrawlersFromFile(): void {
   
 
 //Leitura do arquivo
-const pasta1 = '';
-const nomeArquivo1 = 'dados_brawlers.txt';
-const caminhoArquivo1 = path.join(__dirname, pasta1, nomeArquivo1);
-  const lines = fs.readFileSync(caminhoArquivo1, 'utf8').split('\n');
-  
-  for (const line of lines) {
+  for (const line of readLinesInFile('dados_brawlers.txt')) {
     const values = line.trim().split('\t');
 
     if(values[0] === 'Nome') {
@@ -212,24 +206,13 @@ const caminhoArquivo1 = path.join(__dirname, pasta1, nomeArquivo1);
       brawlers.push(brawler2);
     }
   }
-  
-  //Leitura do arquivo
-  const pasta = '';
-  const nomeArquivo = 'informacoes.json';
-  const caminhoArquivo = path.join(__dirname, pasta, nomeArquivo);
-  fs.writeFileSync(caminhoArquivo, JSON.stringify(brawlers, null, 2));
+
+  createFileWithContent('informacoes.json', brawlers)
+
 }
 
 function inicializarGlobais() {    
-
-    //Leitura do arquivo
-    const pasta = '';
-    const nomeArquivo = 'informacoes.json';
-    const caminhoArquivo = path.join(__dirname, pasta, nomeArquivo);
-
-    //conversão para objeto
-    const rawData = fs.readFileSync(caminhoArquivo, 'utf8');
-    brawlers = JSON.parse(rawData);
+    brawlers = readJSONInFile('informacoes.json')
 
     //Lista de valores para super
     valoresAtributosSuper = [];

@@ -1,3 +1,5 @@
+import { readJSONInFile } from '../../commons/functions/files';
+
 /**
  * 
  * This module aims to load values ​​from the API to the three main JSON
@@ -11,7 +13,7 @@ function main() {
 
 function feedClubJSON() {
 
-    
+
 
 }
 
