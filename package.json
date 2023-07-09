@@ -8,7 +8,8 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "rm -rf dist && tsc && copyfiles -u 1 src/**/*.txt dist && copyfiles -u 1 src/**/*.json dist",
-        "run": "node dist/competition/fandom-quiz/app.js"
+        "run": "node dist/competition/fandom-quiz/app.js",
+        "parcel": "parcel index.html"
     },
     "author": "msscash",
     "license": "MIT",
@@ -22,6 +23,7 @@
     },
     "dependencies": {
         "brawlstars-api-sdk": "^1.0.0",
-        "copyfiles": "^2.4.1"
+        "copyfiles": "^2.4.1",
+        "parcel": "^2.9.3"
     }
 }
