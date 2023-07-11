@@ -7,8 +7,7 @@
     "unpkg": "dist/index.umd.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "rm -rf dist && tsc && copyfiles -u 1 src/**/*.txt src/**/*.json dist",
-        "run": "node dist/competition/fandom-quiz/app.js",
+        "build": "rm -rf dist && sh src/commons/scripts/create-json-files.sh && tsc && copyfiles -u 1 src/**/*.txt src/**/*.json dist",
         "server": "npx nodemon src/server.js"
     },
     "author": "msscash",
