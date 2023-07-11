@@ -131,3 +131,5 @@ dist
 
 # outros
 package-lock.json
+
+src/commons/files/credentials.json
