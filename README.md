@@ -1,8 +1,10 @@
 # bs-club-mngr
 A project to manage clubs in Brawl Stars
 
+
+## Always remember
 ```
-npm run build
+    npm run build
 ```
 
 ## Run quiz
@@ -10,32 +12,25 @@ npm run build
     node dist/competition/fandom-quiz/app.js
 ```
 
-## Run lineup
-```
-    node dist/management/lineup/app.js
-```
-
 ## Star server
-
 ```
     npm run server
 ```
 
+## Config file and host
 
-## Config
-
-Create a .env file
-
-```
-SPREADSHEETID=xcksjcikn381293jdnks
-SPREADSHEETTAB=Sheet1
-PLAYERCELLS=A:Z
-```
-
-
-Generate JSON files
+Create a .env file with content(Use your own values for the following keys)
 
 ```
-sh src/commons/scripts/create-json-files.sh
+    SPREADSHEETID=xcksjcikn381293jdnks
+    SPREADSHEETTAB=Sheet1
+    PLAYERCELLS=A:Z
+```
+
+Create the following environment variables on the host(Use your own API Key and Club tag values)
+
+```
+    export BSAPIKEY=rtPOi...
+    export CLUBTAG=999999999
 ```
 
