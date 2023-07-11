@@ -14,3 +14,9 @@ npm run build
 ```
     node dist/management/lineup/app.js
 ```
+
+## Star server
+
+```
+    npm run server
+```
