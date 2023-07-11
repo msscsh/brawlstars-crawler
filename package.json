@@ -9,7 +9,7 @@
     "scripts": {
         "build": "rm -rf dist && tsc && copyfiles -u 1 src/**/*.txt dist && copyfiles -u 1 src/**/*.json dist",
         "run": "node dist/competition/fandom-quiz/app.js",
-        "server": "npx nodemon src/index.js"
+        "server": "npx nodemon src/server.js"
     },
     "author": "msscash",
     "license": "MIT",
