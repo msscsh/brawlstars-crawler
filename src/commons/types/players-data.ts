@@ -14,6 +14,6 @@ class Paging {
 }
 
 export declare type  PlayersData = {
-    players: Player[];
+    members: Player[];
     paging: Paging;
 }  
