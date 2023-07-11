@@ -20,3 +20,22 @@ npm run build
 ```
     npm run server
 ```
+
+
+## Config
+
+Create a .env file
+
+```
+SPREADSHEETID=xcksjcikn381293jdnks
+SPREADSHEETTAB=Sheet1
+PLAYERCELLS=A:Z
+```
+
+
+Generate JSON files
+
+```
+sh src/commons/scripts/create-json-files.sh
+```
+
