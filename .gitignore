@@ -135,3 +135,5 @@ package-lock.json
 src/commons/files/credentials.json
 src/commons/files/club_data.json
 .env
+
+target/
