@@ -7,11 +7,6 @@ A project to manage clubs in Brawl Stars
     npm run build
 ```
 
-## Run quiz
-```
-    node dist/competition/fandom-quiz/app.js
-```
-
 ## Star server
 ```
     npm run server
@@ -30,7 +25,9 @@ Create a .env file with content(Use your own values for the following keys)
 Create the following environment variables on the host(Use your own API Key and Club tag values)
 
 ```
-    export BSAPIKEY=rtPOi...
     export CLUBTAG=999999999
+    export BS_EMAIL=email@email.com
+    export BS_PASSWORD=theStrongestPassword
+    expost EXTERNAL_IP=YOU_EXTERNAL_IP
 ```
 
