@@ -22,7 +22,7 @@ Create a .env file with content(Use your own values for the following keys)
     PLAYERCELLS=A:Z
 ```
 
-Create the following environment variables on the host(Use your own API Key and Club tag values)
+Create the following environment variables on the host(Use your own values)
 
 ```
     export CLUBTAG=999999999
