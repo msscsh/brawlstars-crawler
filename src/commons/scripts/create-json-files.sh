@@ -1,15 +1,11 @@
 #!/bin/bash
 
-# Brawl Stars API Key
-echo $BSAPIKEY
-# Club tag to be used
-echo $CLUBTAG
+rm -f src/commons/files/club_data.json
+
+BSAPIKEY=$(jq -r '.BSAPIKEY' shell.json)
 
 # output file
 OUTPUT_FILE="src/commons/files/club_data.json"
-
-rm -f src/commons/files/club_data.json
-
 # Makes GET request to API and saves output to output file
 response=$(curl -s -o /dev/null -w "%{http_code}" "https://api.brawlstars.com/v1/clubs/%23${CLUBTAG}" -H "Authorization: Bearer $BSAPIKEY")
 if [ "$response" -eq 200 ]; then
