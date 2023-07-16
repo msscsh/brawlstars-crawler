@@ -138,3 +138,4 @@ src/commons/files/club_data.json
 
 target/
 cypress.env.json
+shell.json
