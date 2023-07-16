@@ -132,10 +132,11 @@ dist
 # outros
 package-lock.json
 
+target/
+cypress/videos/
+
+cypress.env.json
+shell.json
 src/commons/files/credentials.json
 src/commons/files/club_data.json
 .env
-
-target/
-cypress.env.json
-shell.json
