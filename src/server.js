@@ -13,16 +13,12 @@ app.get("/", async (req, res) => {
   res.render("index");
 });
 
-app.post("/", async (req, res) => {
   // const { request, name } = req.body;
+  // const getLines = await getDataInSheetArea(googleSheets, auth);
+  // const playersInSheet = transformTwoDimensionalArrayToListOfPlayers(getLines.data.values);
+  // console.log(playersInSheet);
+app.post("/", async (req, res) => {
   const { googleSheets, auth } = await prepareCredentials();
-  await clearPlayersLines(googleSheets, auth);
-
-  const getLines = await getDataInSheetArea(googleSheets, auth);
-
-  const playersInSheet = transformTwoDimensionalArrayToListOfPlayers(getLines.data.values);
-  console.log('playersInSheet-----------------------------------');
-  console.log(playersInSheet);
 
   const playersInFile = getPlayers();
   console.log('playersInFile------------------------------------');
@@ -30,22 +26,17 @@ app.post("/", async (req, res) => {
 
   const playerToAdd = [];
   playersInFile.forEach(player => {
-    if(!valueAlreadyExistsInThis(playersInSheet, 'tag', player.tag )) {
-      const columns = [player.name, player.trophies, player.tag];
-      playerToAdd.push(columns);
-    }
+    const columns = [player.name, player.trophies, player.tag];
+    playerToAdd.push(columns);
   });
 
   console.log('playerToAdd---------------------------------------');
   console.log(playerToAdd);
 
-  if( !(playerToAdd.length === 0) ){
-    await addLinesInSheet(googleSheets, auth, playerToAdd);
-    res.send("Data has been updated! Thank you!");
-  }
-  else {
-    res.send("Data has been previously updated! Thank you!");
-  }
+  await clearPlayersLines(googleSheets, auth);
+  await addLinesInSheet(googleSheets, auth, playerToAdd);
+
+  res.send("Data has been updated! Thank you!");
 });
 
 app.listen(1337, (req, res) => console.log("running on 1337"));

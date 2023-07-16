@@ -18,7 +18,6 @@ export function transformTwoDimensionalArrayToListOfPlayers(arrayBidimensional) 
     return result
 }
 
-
 export function valueAlreadyExistsInThis(array, propriedade, valor) {
     return array.some(objeto => objeto[propriedade] === valor);
 }
