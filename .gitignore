@@ -137,4 +137,4 @@ src/commons/files/club_data.json
 .env
 
 target/
-cypress.config.ts
+cypress.env.json
