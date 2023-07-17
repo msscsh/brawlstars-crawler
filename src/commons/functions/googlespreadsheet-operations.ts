@@ -10,7 +10,7 @@ const spreadsheetTargetPlayerData = process.env.SPREADSHEETTAB+'!'+process.env.P
 console.log(`The players cells location  ${spreadsheetTargetPlayerData}`);
 
 export function getPlayers(): any {
-    const data: PlayersData = readJSONInFile('club_data.json');
+    const data: PlayersData = readJSONInFile('master.json');
     return data.members;
 }
 
@@ -40,7 +40,7 @@ export async function clearPlayersLines(googleSheets, auth) {
     {
       auth,
       spreadsheetId,
-      range: process.env.SPREADSHEETTAB+'!'+'A2:C',
+      range: process.env.SPREADSHEETTAB+'!'+'A2:ZZ',
     },
     (err, response) => {
       if (err) {
