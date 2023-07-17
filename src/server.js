@@ -19,6 +19,7 @@ app.get("/", async (req, res) => {
   // console.log(playersInSheet);
 app.post("/", async (req, res) => {
   const { googleSheets, auth } = await prepareCredentials();
+  await clearPlayersLines(googleSheets, auth);
 
   const playersInFile = getPlayers();
   console.log('playersInFile------------------------------------');
@@ -26,15 +27,16 @@ app.post("/", async (req, res) => {
 
   const playerToAdd = [];
   playersInFile.forEach(player => {
-    const columns = [player.name, player.trophies, player.tag];
+    const columns = [player.tag, player.expLevel, player.name, player.trophies, `=HIPERLINK("https://brawlstats.com/profile/${player.tag.substring(1)}"; "${player.tag}")`, player['3vs3Victories'], player.highestTrophies, player.isQualifiedFromChampionshipChallenge];
     playerToAdd.push(columns);
   });
 
   console.log('playerToAdd---------------------------------------');
   console.log(playerToAdd);
 
-  await clearPlayersLines(googleSheets, auth);
-  await addLinesInSheet(googleSheets, auth, playerToAdd);
+  setTimeout(() => {
+    addLinesInSheet(googleSheets, auth, playerToAdd);
+  }, 10000);
 
   res.send("Data has been updated! Thank you!");
 });
