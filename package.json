@@ -7,7 +7,9 @@
     "unpkg": "dist/index.umd.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "rm -rf dist shell.json cypress.env.json && sh src/commons/scripts/create-cypress-env.sh && npx cypress run --spec 'cypress/e2e/login.spec.cy.js' --headless && sh src/commons/scripts/create-json-files.sh && tsc && copyfiles -u 1 src/**/*.txt src/**/*.json dist",
+        "keys": "rm -rf shell.json cypress.env.json && sh src/commons/scripts/create-cypress-env.sh && npx cypress run --spec 'cypress/e2e/login.spec.cy.js' --headless ",
+        "files": "bash src/commons/scripts/create-json-files.sh",
+        "build": "rm -rf dist && tsc && copyfiles -u 1 src/**/*.txt src/**/*.json dist",
         "server": "npx nodemon src/server.js"
     },
     "author": "msscash",
