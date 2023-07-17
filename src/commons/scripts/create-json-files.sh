@@ -37,6 +37,9 @@ if [ "$response" -eq 200 ]; then
 
     done
 
+    rm -f src/commons/files/club_data.json
+    rm -f src/commons/files/member_*_data.json
+
 
 else
   echo "Request failed, check environment variables (status code $response)"
