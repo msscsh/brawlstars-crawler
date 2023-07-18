@@ -2,16 +2,6 @@
 A project to manage clubs in Brawl Stars
 
 
-## Always remember
-```
-    npm run build
-```
-
-## Star server
-```
-    npm run server
-```
-
 ## Config file and host
 
 Create a .env file with content(Use your own values for the following keys)
