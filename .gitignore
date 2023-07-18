@@ -137,8 +137,5 @@ cypress/videos/
 
 cypress.env.json
 shell.json
-src/commons/files/credentials.json
-src/commons/files/club_data.json
 .env
-src/commons/files/member_*_data.json
-src/commons/files/master.json
+src/commons/files/*
