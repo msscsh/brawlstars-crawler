@@ -9,8 +9,8 @@ Create a .env file with content(Use your own values for the following keys)
 ./.env
 ```
     SPREADSHEETID=xcksjcikn381293jdnks
-    SPREADSHEETTAB=Sheet1
-    PLAYERCELLS=A:Z
+    PLAYERSTAB=Sheet1
+    PLAYERSCELLS=A2:Z
 ```
 
 Create the following environment variables on the host(Use your own values)

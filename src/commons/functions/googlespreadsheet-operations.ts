@@ -4,10 +4,10 @@ import { readJSONInFile } from '../../commons/functions/files';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const spreadsheetId = process.env.SPREADSHEETID || "10bxlToXdOLsyl2wER2W1TcA9auYmPPqg00RPhIysiZk";
+const spreadsheetId = process.env.SPREADSHEETID;
 console.log(`The spreadsheetId ${spreadsheetId}`);
-const spreadsheetTargetPlayerData = process.env.SPREADSHEETTAB+'!'+process.env.PLAYERCELLS;
-console.log(`The players cells location  ${spreadsheetTargetPlayerData}`);
+const spreadsheetTargetPlayersData = process.env.PLAYERSTAB+'!'+process.env.PLAYERSCELLS;
+console.log(`The players cells location  ${spreadsheetTargetPlayersData}`);
 
 export function getPlayers(): any {
     const data: PlayersData = readJSONInFile('master.json');
@@ -18,7 +18,7 @@ export async function addLinesInSheet(googleSheets, auth, lines) {
   await googleSheets.spreadsheets.values.append({
     auth,
     spreadsheetId,
-    range: spreadsheetTargetPlayerData,
+    range: spreadsheetTargetPlayersData,
     valueInputOption: "USER_ENTERED",
     resource: {
       values: lines,
@@ -30,7 +30,7 @@ export async function getDataInSheetArea(googleSheets, auth) {
   const getRows = await googleSheets.spreadsheets.values.get({
     auth,
     spreadsheetId,
-    range: spreadsheetTargetPlayerData,
+    range: spreadsheetTargetPlayersData,
   });
   return getRows;
 }
@@ -40,7 +40,7 @@ export async function clearPlayersLines(googleSheets, auth) {
     {
       auth,
       spreadsheetId,
-      range: spreadsheetTargetPlayerData,
+      range: spreadsheetTargetPlayersData,
     },
     (err, response) => {
       if (err) {
