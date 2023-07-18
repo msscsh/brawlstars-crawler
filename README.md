@@ -26,10 +26,10 @@ Create a .env file with content(Use your own values for the following keys)
 Create the following environment variables on the host(Use your own values)
 
 ```
-    export CLUBTAG=999999999
-    export BS_EMAIL=email@email.com
-    export BS_PASSWORD=theStrongestPassword
-    expost EXTERNAL_IP=YOU_EXTERNAL_IP
+    CLUBTAG=999999999
+    BS_EMAIL=email@email.com
+    BS_PASSWORD=theStrongestPassword
+    EXTERNAL_IP=YOU_EXTERNAL_IP
 ```
 
 ## Club config
