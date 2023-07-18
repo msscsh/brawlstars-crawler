@@ -10,7 +10,8 @@
         "keys": "rm -rf shell.json cypress.env.json && sh src/commons/scripts/create-cypress-env.sh && npx cypress run --spec 'cypress/e2e/login.spec.cy.js' --headless ",
         "files": "bash src/commons/scripts/create-json-files.sh",
         "build": "rm -rf dist && tsc && copyfiles -u 1 src/**/*.txt src/**/*.json dist",
-        "server": "npx nodemon src/server.js"
+        "server": "npx nodemon src/server.js",
+        "pipeline": "npm run keys && npm run files && npm run build && npm run server"
     },
     "author": "msscash",
     "license": "MIT",
