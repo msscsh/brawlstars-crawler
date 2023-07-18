@@ -1,3 +1,5 @@
+import { readLinesInFile } from '../../commons/functions/files';
+
 export function transformListOfPlayersToTwoDimensionalArray(players) {
     const lines = [];
     players.forEach(player => {
@@ -20,4 +22,20 @@ export function transformTwoDimensionalArrayToListOfPlayers(arrayBidimensional) 
 
 export function valueAlreadyExistsInThis(array, propriedade, valor) {
     return array.some(objeto => objeto[propriedade] === valor);
+}
+
+export function getTeamFromPlayerTag(playerTag) {
+    
+    const lines = readLinesInFile('team_relation.txt');
+
+    for (let i = 0; i < lines.length; i++) {
+        const [team, players] = lines[i].split(':');
+        const playerList = players.split(';').map(player => player.trim());
+        
+        if (playerList.includes(playerTag)) {
+        return team;
+        }
+    }
+
+    return 'Time não encontrado';
 }

@@ -2,8 +2,8 @@ const { log } = require("console");
 const express = require("express");
 const { google } = require("googleapis");
 
-const { transformTwoDimensionalArrayToListOfPlayers, valueAlreadyExistsInThis } = require('../dist/commons/functions/utils');
-const { getDataInSheetArea, addLinesInSheet, getPlayers, clearPlayersLines } = require('../dist/commons/functions/googlespreadsheet-operations');
+const { getTeamFromPlayerTag } = require('../dist/commons/functions/utils');
+const { addLinesInSheet, getPlayers, clearPlayersLines } = require('../dist/commons/functions/googlespreadsheet-operations');
 
 const app = express();
 app.set("view engine", "ejs");
@@ -27,7 +27,7 @@ app.post("/", async (req, res) => {
 
   const playerToAdd = [];
   playersInFile.forEach(player => {
-    const columns = [player.tag, player.expLevel, player.name, player.trophies, `=HIPERLINK("https://brawlstats.com/profile/${player.tag.substring(1)}"; "${player.tag}")`, player['3vs3Victories'], player.highestTrophies, player.isQualifiedFromChampionshipChallenge];
+    const columns = [player.tag, player.expLevel, player.name, player.trophies, `=HIPERLINK("https://brawlstats.com/profile/${player.tag.substring(1)}"; "${player.tag}")`, player['3vs3Victories'], player.highestTrophies, player.isQualifiedFromChampionshipChallenge, getTeamFromPlayerTag(player.tag)];
     playerToAdd.push(columns);
   });
 

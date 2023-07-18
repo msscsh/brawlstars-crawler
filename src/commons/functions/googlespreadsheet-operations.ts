@@ -40,7 +40,7 @@ export async function clearPlayersLines(googleSheets, auth) {
     {
       auth,
       spreadsheetId,
-      range: process.env.SPREADSHEETTAB+'!'+'A2:ZZ',
+      range: process.env.SPREADSHEETTAB+'!'+'A2:J',
     },
     (err, response) => {
       if (err) {
