@@ -36,7 +36,7 @@ app.post("/", async (req, res) => {
 
   setTimeout(() => {
     addLinesInSheet(googleSheets, auth, playerToAdd);
-  }, 10000);
+  }, 5000);
 
   res.send("Data has been updated! Thank you!");
 });
