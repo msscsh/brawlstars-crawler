@@ -8,7 +8,7 @@ describe('Generate API Key', () => {
     cy.wait(4000)
 
     //Coockies settings
-    cy.get('#onetrust-accept-btn-handler').click()
+    // cy.get('#onetrust-accept-btn-handler').click()
 
     //Login
     cy.get('#email').type(Cypress.env('BS_EMAIL'))
