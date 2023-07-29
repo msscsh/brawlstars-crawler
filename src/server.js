@@ -1,10 +1,13 @@
 const express = require("express");
+const favicon = require('serve-favicon');
+const path = require('path');
 const { google } = require("googleapis");
 
 const { getTeamFromPlayerTag } = require('../dist/commons/functions/utils');
 const { addLinesInSheet, getPlayers, clearPlayersLines } = require('../dist/commons/functions/googlespreadsheet-operations');
 
 const app = express();
+app.use(favicon(path.join(__dirname, 'commons/files', 'favicon.ico')));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
