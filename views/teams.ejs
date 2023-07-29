@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Organização de Times</title>
+  <style>
+    .team-area {
+      border: 2px dashed #ccc;
+      padding: 10px;
+      display: inline-block;
+      margin: 10px;
+      min-height: 35px;
+      min-width: 100px;
+    }
+    .highlight {
+      border: 2px dashed green;
+    }
+    .highlight-error {
+      border: 2px dashed red;
+      animation: shake 0.5s ease-in-out;
+    }
+    .player-box {
+      display: inline-block;
+      background-color: #f0f0f0;
+      padding: 5px;
+      margin: 2px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      min-width: 100px;
+    }
+    .player-list {
+      border: 2px dashed #ccc;
+      min-height: 35px;
+      margin: 10px;
+      padding: 10px;
+    }
+    .button-area {
+      margin-top: 15px;
+      margin-left: 10px;
+    }
+    .teams-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .team-container {
+      flex: 0 0 80px;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Team lineup</h1>
+
+  <div>
+    <h2>Unscheduled Players</h2>
+    <div id="player-list" class="player-list" ondrop="drop(event, -1)" ondragover="allowDrop(event)" ondragleave="removeHighlight(event)">
+      <% const mockPlayers = ["Player1", "Player2", "Player3", "Player4", "Player5"]; %>
+      <% mockPlayers.forEach((player) => { %>
+        <span class="player-box" draggable="true" ondragstart="drag(event)"><%= player %></span>
+      <% }); %>
+    </div>
+  </div>
+
+  <div>
+    <% const teams = Array.from({ length: 10 }, () => ({ name: "Time", players: [] })); %>
+    <div class="teams-grid">
+      <% teams.forEach((team, teamIndex) => { %>
+        <div class="team-container">
+          <h2 contenteditable="true" oninput="updateTeamName(event, <%= teamIndex %> )"><%= team.name %></h2>
+          <div class="team-area" ondrop="drop(event, <%= teamIndex %>)" ondragover="allowDrop(event)" ondragleave="removeHighlight(event)">
+            <% team.players.forEach((player) => { %>
+              <span class="player-box" draggable="true" ondragstart="drag(event)"><%= player %></span>
+            <% }); %>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <div class="button-area" >
+    <button onclick="resetTeams()">Clean</button>
+    <button onclick="saveTeams()">Save teams</button>
+  </div>
+
+  <script>
+    const availablePlayers = <%- JSON.stringify(["Player1", "Player2", "Player3", "Player4", "Player5"]) %>;
+    const maxPlayersPerTeam = 3;
+    let teams = [];
+    const initialTeams = ["Team A", "Team B", "Team C", "Team D", "Team E", "Team F", "Team G", "Team H", "Team I", "Team J"];
+
+    function allowDrop(event) {
+      event.preventDefault();
+      event.currentTarget.classList.add("highlight");
+    }
+
+    function removeHighlight(event) {
+      event.currentTarget.classList.remove("highlight");
+      event.currentTarget.classList.remove("highlight-error");
+    }
+
+    function drag(event) {
+      event.dataTransfer.setData("text", event.target.innerText);
+    }
+
+    function drop(event, teamIndex) {
+      event.preventDefault();
+      const playerName = event.dataTransfer.getData("text");
+      event.currentTarget.classList.remove("highlight");
+
+      if (teamIndex === -1) {
+        // Player is being returned to the player list
+        const playerIndex = teams.findIndex((team) => team.players.includes(playerName));
+        if (playerIndex !== -1) {
+          teams[playerIndex].players.splice(teams[playerIndex].players.indexOf(playerName), 1);
+          availablePlayers.push(playerName);
+        }
+      } else {
+        // Player is being moved to another team
+        const team = teams[teamIndex];
+
+        if (team.players.length < maxPlayersPerTeam) {
+          if (availablePlayers.includes(playerName)) {
+            availablePlayers.splice(availablePlayers.indexOf(playerName), 1);
+            team.players.push(playerName);
+          } else {
+            // Player is already in a team, remove him from the current team
+            teams.forEach((t) => {
+              const playerIndex = t.players.indexOf(playerName);
+              if (playerIndex !== -1) {
+                t.players.splice(playerIndex, 1);
+              }
+            });
+
+            teams[teamIndex].players.push(playerName);
+          }
+        } else {
+          event.currentTarget.classList.add("highlight-error");
+        }
+      }
+
+      updateView();
+    }
+
+    function updateTeamName(event, teamIndex) {
+      const newName = event.target.innerText;
+      teams[teamIndex].name = newName;
+      updateView();
+    }
+
+    function resetTeams() {
+      teams = initialTeams.map((team) => ({ name: team, players: [] }));
+      availablePlayers.splice(0, availablePlayers.length, ...["Player1", "Player2", "Player3", "Player4", "Player5"]);
+
+      updateView();
+    }
+
+    function updateView() {
+      const playerList = document.getElementById("player-list");
+      const teamAreas = document.querySelectorAll(".team-area");
+
+      playerList.innerHTML = "";
+      availablePlayers.forEach((player) => {
+        const span = document.createElement("span");
+        span.innerText = player;
+        span.className = "player-box";
+        span.draggable = true;
+        span.ondragstart = drag;
+        playerList.appendChild(span);
+      });
+
+      teams.forEach((team, index) => {
+        const teamArea = teamAreas[index];
+        teamArea.innerHTML = team.players.map((player) => `<span class="player-box" draggable="true" ondragstart="drag(event)">${player}</span>`).join("");
+      });
+    }
+
+    function saveTeams() {
+      let output = "";
+      teams.forEach((team, index) => {
+        output += `${team.name}:${team.players.join(";")}\n`;
+      });
+
+      console.log(output);
+    }
+
+    window.addEventListener("load", () => {
+      resetTeams();
+    });
+
+  </script>
+</body>
+</html>
