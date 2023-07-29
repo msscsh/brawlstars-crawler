@@ -139,4 +139,3 @@ cypress.env.json
 shell.json
 .env
 src/commons/files/*
-!src/commons/files/favicon.ico
