@@ -8,6 +8,7 @@ const { addLinesInSheet, getPlayers, clearPlayersLines } = require('../dist/comm
 
 const app = express();
 app.use(favicon(path.join(__dirname, 'commons/files', 'favicon.ico')));
+app.use(express.static(path.join(__dirname, 'commons/files')));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
@@ -45,15 +46,9 @@ app.post("/spreadsheet-data", async (req, res) => {
 
 //Route teams
 app.get('/teams', (req, res) => {
-  const data = {
-  };
-  res.render('teams', data); // 'index' é o nome do arquivo EJS que contém a tela da organização de times
-});
-
-// Inicie o servidor
-const PORT = 3000; // ou qualquer outra porta que desejar
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  const players = [
+  ];
+  res.render('teams', {players});
 });
 
 app.listen(1337, (req, res) => console.log("running on 1337"));
