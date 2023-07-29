@@ -22,6 +22,12 @@ Create the following environment variables on the host(Use your own values)
     EXTERNAL_IP=YOU_EXTERNAL_IP
 ```
 
+Add your favicon in the following path
+
+./src/commons/files/
+
+
+
 ## Club config
 
 Create a team list file with the following format(one line per team for each team)
