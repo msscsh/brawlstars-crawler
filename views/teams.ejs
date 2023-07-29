@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Organização de Times</title>
+  <title>Team lineup</title>
   <style>
     .team-area {
       border: 2px dashed #ccc;
@@ -67,7 +67,7 @@
   </div>
 
   <div>
-    <% const teams = Array.from({ length: 10 }, () => ({ name: "Time", players: [] })); %>
+    <% const teams = Array.from({ length: 10 }, () => ({ name: "Team", players: [] })); %>
     <div class="teams-grid">
       <% teams.forEach((team, teamIndex) => { %>
         <div class="team-container">
