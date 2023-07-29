@@ -1,4 +1,3 @@
-const { log } = require("console");
 const express = require("express");
 const { google } = require("googleapis");
 
@@ -17,7 +16,7 @@ app.get("/", async (req, res) => {
   // const getLines = await getDataInSheetArea(googleSheets, auth);
   // const playersInSheet = transformTwoDimensionalArrayToListOfPlayers(getLines.data.values);
   // console.log(playersInSheet);
-app.post("/", async (req, res) => {
+app.post("/spreadsheet-data", async (req, res) => {
   const { googleSheets, auth } = await prepareCredentials();
   await clearPlayersLines(googleSheets, auth);
 
@@ -39,6 +38,19 @@ app.post("/", async (req, res) => {
   }, 5000);
 
   res.send("Data has been updated! Thank you!");
+});
+
+//Route teams
+app.get('/teams', (req, res) => {
+  const data = {
+  };
+  res.render('teams', data); // 'index' é o nome do arquivo EJS que contém a tela da organização de times
+});
+
+// Inicie o servidor
+const PORT = 3000; // ou qualquer outra porta que desejar
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
 
 app.listen(1337, (req, res) => console.log("running on 1337"));
