@@ -1,4 +1,4 @@
-import { readLinesInFile } from '../../commons/functions/files';
+import { readJSONInFile } from '../../commons/functions/files';
 
 export function transformListOfPlayersToTwoDimensionalArray(players) {
     const lines = [];
@@ -26,16 +26,18 @@ export function valueAlreadyExistsInThis(array, propriedade, valor) {
 
 export function getTeamFromPlayerTag(playerTag) {
     
-    const lines = readLinesInFile('team_relation.txt');
+    const times = readJSONInFile('team_relation.json');
 
-    for (let i = 0; i < lines.length; i++) {
-        const [team, players] = lines[i].split(':');
-        const playerList = players.split(';').map(player => player.trim());
-        
-        if (playerList.includes(playerTag)) {
-        return team;
+    if(times) {
+        for (const time of times) {
+            if (time.players.includes(playerTag)) {
+                return time.name;
+            }
         }
+        return 'Player is not associated with any team';
+    }
+    else {
+        return 'Teams file not yet created';
     }
 
-    return 'Time não encontrado';
 }
