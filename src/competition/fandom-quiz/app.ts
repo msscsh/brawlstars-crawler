@@ -1,4 +1,4 @@
-import { readLinesInFile, readJSONInFile, createFileWithContent } from '../../commons/functions/files';
+import { readLinesInFile, readJSONInFile, createFileWithJSONContent } from '../../commons/functions/files';
 
 interface Brawler {
     'nome': string;
@@ -207,7 +207,7 @@ function createBrawlersFromFile(): void {
     }
   }
 
-  createFileWithContent('informacoes.json', brawlers)
+  createFileWithJSONContent('informacoes.json', brawlers)
 
 }
 

@@ -22,12 +22,16 @@ Create the following environment variables on the host(Use your own values)
     EXTERNAL_IP=YOU_EXTERNAL_IP
 ```
 
+Add your favicon in the following path
+
+./src/commons/files/
+
+
+
 ## Club config
 
-Create a team list file with the following format(one line per team for each team)
+Create the list of times the server menu
+http://localhost:1337/teams
 
-./src/commons/files/team_relation.txt
-```
-    TEAM_A:TAG_PLAYER_A_1;TAG_PLAYER_A_2;TAG_PLAYER_A_3;
-```
-
+Send data to the spreadsheet
+http://localhost:1337/
