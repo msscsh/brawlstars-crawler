@@ -44,7 +44,7 @@ Report from ESLint + Prettier
 
 ```
     #Get a report
-    npx eslint . --fix
+    npx eslint .
 
     #Auto fix issues
     npx eslint . --fix
