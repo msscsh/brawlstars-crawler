@@ -1,5 +1,3 @@
-const fs = require("fs");
-
 describe("Generate API Key", () => {
 	it("Generate API Key", () => {
 		//Visit

@@ -10,6 +10,7 @@ const spreadsheetTargetPlayersData =
 	process.env.PLAYERSTAB + "!" + process.env.PLAYERSCELLS;
 console.log(`The players cells location  ${spreadsheetTargetPlayersData}`);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getPlayers(): any {
 	const data: PlayersData = readJSONInFile("master.json");
 	return data.members;
@@ -43,7 +44,7 @@ export async function clearPlayersLines(googleSheets, auth) {
 			spreadsheetId,
 			range: spreadsheetTargetPlayersData,
 		},
-		(err, response) => {
+		(err, _response) => {
 			if (err) {
 				console.error("Something is wrong i can feel it:", err);
 				return;

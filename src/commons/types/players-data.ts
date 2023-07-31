@@ -10,7 +10,7 @@ class Player {
 }
 
 class Paging {
-	cursors: {};
+	cursors: NonNullable<unknown>;
 }
 
 export declare type PlayersData = {

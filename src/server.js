@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const express = require("express");
 const favicon = require("serve-favicon");
 const path = require("path");
@@ -134,7 +136,7 @@ app.post("/teams", (req, res) => {
 	});
 });
 
-app.listen(1337, (req, res) => console.log("running on 1337"));
+app.listen(1337, (_req, _res) => console.log("running on 1337"));
 
 async function prepareCredentials() {
 	const auth = new google.auth.GoogleAuth({

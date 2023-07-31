@@ -11,7 +11,7 @@ export function readStringInFile(fileName: string): string {
 		return undefined;
 	}
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function readJSONInFile(fileName: string): any {
 	const readedFile = readStringInFile(fileName);
 	return readedFile ? JSON.parse(readedFile) : undefined;
@@ -24,6 +24,7 @@ export function readLinesInFile(fileName: string): string[] {
 
 export function createFileWithJSONContent(
 	fileName: string,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	content: any,
 ): string {
 	const previousFolder = path.resolve(__dirname, "..");
@@ -34,6 +35,7 @@ export function createFileWithJSONContent(
 
 export function createPersistentFileWithJSONContent(
 	fileName: string,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	content: any,
 ): string {
 	const previousFolder = path.resolve(__dirname, "../../../src/commons/");

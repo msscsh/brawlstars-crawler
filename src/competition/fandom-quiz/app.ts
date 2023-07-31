@@ -72,8 +72,8 @@ function generateUniqueQuestion(): Question {
 
 function isCombinationUsed(
 	selectedBrawler: Brawler,
-	type: string,
-	attribute: string,
+	_type: string,
+	_attribute: string,
 ): boolean {
 	const hasUsedBrawlerGroup = usedBrawlerGroups.includes(selectedBrawler);
 	return hasUsedBrawlerGroup;
@@ -154,6 +154,7 @@ function generateDirectInfoQuestion(attribute): Question {
 	};
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function shuffle(array: any[]) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
