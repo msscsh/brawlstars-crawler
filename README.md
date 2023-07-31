@@ -35,3 +35,31 @@ http://localhost:1337/teams
 
 Send data to the spreadsheet
 http://localhost:1337/
+
+
+
+## Dev's Remembrall
+
+Report from ESLint + Prettier
+
+```
+    #Get a report
+    npx eslint . --fix
+
+    #Auto fix issues
+    npx eslint . --fix
+```
+
+Project stages
+
+```
+    #Separated
+    npm run codereview
+    npm run keys
+    npm run files
+    npm run build
+    npm run server
+
+    #One stage to rule then all (no code review)
+    npm run pipeline
+```
