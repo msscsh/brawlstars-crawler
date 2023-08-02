@@ -9,11 +9,11 @@ app.use(express.static(path.join(__dirname, "commons/files")));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
-const routeSpreadsheet = require('./routes/route-spreadsheet');
-const routeTeams = require('./routes/route-teams');
+const routeSpreadsheet = require("./routes/route-spreadsheet");
+const routeTeams = require("./routes/route-teams");
 
-app.use('/spreadsheet-data', routeSpreadsheet);
-app.use('/teams', routeTeams);
+app.use("/spreadsheet-data", routeSpreadsheet);
+app.use("/teams", routeTeams);
 
 app.get("/", async (req, res) => {
 	res.render("index");

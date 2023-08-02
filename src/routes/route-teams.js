@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 const {
 	createPersistentFileWithJSONContent,
 	createFileWithJSONContent,
-    readJSONInFile
+	readJSONInFile,
 } = require("../../dist/commons/functions/files");
 
-const {	getPlayers } = require("../../dist/commons/functions/googlespreadsheet-operations");
+const {
+	getPlayers,
+} = require("../../dist/commons/functions/googlespreadsheet-operations");
 
 router.get("/", (_req, res) => {
-
 	const clubPlayers = getPlayers();
 	let teams = readJSONInFile("team_relation.json");
 
@@ -33,7 +34,6 @@ router.get("/", (_req, res) => {
 	const availablePlayers = createAvaiblePlayersList(clubPlayers, teams);
 	removeOldClubPlayers(clubPlayers, teams);
 	res.render("teams", { clubPlayers, availablePlayers, teams });
-
 });
 
 function createAvaiblePlayersList(clubPlayers, teams) {
