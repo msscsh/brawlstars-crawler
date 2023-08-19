@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Attributes</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      max-width: 800px;
+      background-color: #fff;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
+    .player-list {
+      flex: 1;
+      padding: 20px;
+      background-color: black;
+      color: yellow;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+    .player-list ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+    }
+    .player-list li {
+      cursor: pointer;
+      padding: 5px;
+      border: 1px solid yellow;
+      border-radius: 3px;
+      min-width: 180px;
+    }
+    .player-details {
+      flex: 2;
+      padding: 20px;
+      background-color: #fff;
+      color: black;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      min-width: 400px;
+    }
+    .player-details h2 {
+      color: black;
+      margin-bottom: 10px;
+    }
+    .player-attributes {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    .player-attributes li {
+      margin-bottom: 5px;
+    }
+    .player-form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background-color: gray;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      margin-top: 20px;
+      max-height: 135px;
+    }
+    .player-form label {
+      color: black;
+    }
+    .player-form input[type="text"] {
+      padding: 5px;
+      border: 1px solid gray;
+      border-radius: 3px;
+      width: 100%;
+    }
+    .player-form button {
+      padding: 4px 15px;
+      background-color: black;
+      color: yellow;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .player-form button:hover {
+      background-color: yellow;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="player-list">
+      <h1>Player List</h1>
+      <ul>
+        <% masterData.forEach((element, index) => { %>
+          <li onclick="showPlayerDetails('<%= element.tag %>','<%= element.name %>')"><%= element.name %></li>
+        <% }); %>
+      </ul>
+    </div>
+    <div class="player-details" id="player-details">
+      <h2>Player Details</h2>
+      <p><span id="player-name"></span></p>
+      <ul class="player-attributes" id="player-attributes"></ul>
+
+      <form action="/player-info/addAttribute" method="post" class="player-form">
+        <input id="tag" type="hidden" name="tag">
+        <label for="attributeName">Attribute Name:</label>
+        <input type="text" id="attributeName" name="attributeName" required><br>
+        <label for="attributeValue">Attribute Value:</label>
+        <input type="text" id="attributeValue" name="attributeValue" required>
+        <button type="submit">Add Attribute</button>
+      </form>
+      
+    </div>
+  </div>
+  
+  <script>
+    const relationData = <%- JSON.stringify(relationData) %>;
+  
+    function showPlayerDetails(tag, name) {
+
+      const playerDetailsDiv = document.getElementById('player-details');
+      const playerNameSpan = document.getElementById('player-name');
+      const playerAttributesList = document.getElementById('player-attributes');
+      const player = relationData[tag];
+      const playerTagInput = document.getElementById('tag');
+      
+      playerNameSpan.textContent = '';
+      playerAttributesList.innerHTML = '';
+
+      if (player && player.attributes) {
+        for (const attributeName in player.attributes) {
+          const attributeValue = player.attributes[attributeName];
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `<strong>${attributeName}:</strong> ${attributeValue}`;
+          playerAttributesList.appendChild(listItem);
+          playerNameSpan.textContent = name;
+          playerTagInput.value = tag;
+        }
+      }
+  
+      playerDetailsDiv.style.display = 'block';
+    }
+  </script>
+  </body>
+  </html>
