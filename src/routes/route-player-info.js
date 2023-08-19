@@ -12,29 +12,31 @@ const {
 	getPlayers,
 } = require("../../dist/commons/functions/googlespreadsheet-operations");
 
-let relationData = readJSONInFile('player_info_relation.json');
+let relationData = readJSONInFile("player_info_relation.json");
 
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
 	const masterData = getPlayers();
-    res.render('players-info', { masterData, relationData });
+	res.render("players-info", { masterData, relationData });
 });
 
-router.post('/addAttribute', (req, res) => {
+router.post("/addAttribute", (req, res) => {
+	const { tag, attributeName, attributeValue } = req.body;
 
-    const { tag, attributeName, attributeValue } = req.body;
+	if (!relationData[tag]) {
+		relationData[tag] = { attributes: {} };
+	}
 
-    if (!relationData[tag]) {
-      relationData[tag] = { attributes: {} };
-    }
-  
-    relationData[tag].attributes[attributeName] = attributeValue;
-    console.log(relationData);
+	relationData[tag].attributes[attributeName] = attributeValue;
+	console.log(relationData);
 
-    // Save merged data back to the file
-    createFileWithJSONContent("player_info_relation.json", relationData);
-    createPersistentFileWithJSONContent("player_info_relation.json", relationData);
-  
-    res.redirect('/');
+	// Save merged data back to the file
+	createFileWithJSONContent("player_info_relation.json", relationData);
+	createPersistentFileWithJSONContent(
+		"player_info_relation.json",
+		relationData,
+	);
+
+	res.redirect("/");
 });
 
 module.exports = router;
