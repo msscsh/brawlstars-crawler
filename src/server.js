@@ -11,9 +11,11 @@ app.use(express.urlencoded({ extended: true }));
 
 const routeSpreadsheet = require("./routes/route-spreadsheet");
 const routeTeams = require("./routes/route-teams");
+const routePlayersInfo = require("./routes/route-player-info");
 
 app.use("/spreadsheet-data", routeSpreadsheet);
 app.use("/teams", routeTeams);
+app.use("/player-info", routePlayersInfo);
 
 app.get("/", async (req, res) => {
 	res.render("index");
