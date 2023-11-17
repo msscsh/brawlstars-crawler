@@ -26,7 +26,8 @@ Add your favicon in the following path
 
 ./src/commons/files/
 
-
+Add your google spreadsheet credential json in this locantion, with this name:
+./src/commons/files/credentials.json
 
 ## Club config
 
