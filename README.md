@@ -6,7 +6,10 @@ A project to manage clubs in Brawl Stars
 
 Create a .env file with content(Use your own values for the following keys)
 
-touch ./.env
+```
+    touch ./.env
+```
+
 ```
     SPREADSHEETID=xcksjcikn381293jdnks
     PLAYERSTAB=Sheet1
