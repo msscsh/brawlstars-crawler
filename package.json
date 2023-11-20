@@ -1,0 +1,19 @@
+{
+  "name": "brawlstars-crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "codereview": "npx eslint .",
+    "keys": "rm -rf api_key cypress.env.json && sh scripts/create-cypress-env.sh && npx cypress run --spec 'cypress/e2e/login.spec.cy.js' --headless "
+  },
+  "author": "msscash",
+  "license": "MIT",
+  "devDependencies": {
+    "brawlstars-api-sdk": "^1.0.0",
+    "cypress": "^13.5.1",
+    "eslint": "^8.46.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0"
+  }
+}

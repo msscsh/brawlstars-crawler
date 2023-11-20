@@ -37,7 +37,7 @@ describe("Generate API Key", () => {
 		cy.get("samp")
 			.invoke("text")
 			.then((text) => {
-				cy.writeFile("shell.json", `{"BSAPIKEY":"${text}"}`);
+				cy.writeFile("api_key", `${text}`);
 			});
 	});
 });
