@@ -1,6 +1,15 @@
 import sys
 import requests
 from pymongo import MongoClient
+from datetime import datetime
+
+def log_line(line):
+    with open('python.log', 'a') as log_file:
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        dated_line = f'{now} : {line}'
+        log_file.write(dated_line)
+        print(dated_line)
+
 
 def retrive_data_from_api(tag):
     with open('api_key', 'r') as arquivo:
@@ -11,15 +20,15 @@ def retrive_data_from_api(tag):
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        print(f'Success: {response.status_code}')
+        log_line(f'Success: {response.status_code}')
         return response.json()
     else:
-        print(f'Error: {response.status_code}')
+        log_line(f'Error: {response.status_code}')
         return None
 
 def insert_battle_log(battlelog_json):
     result = collection.insert_one(battlelog_json)
-    print(f"ID: {result.inserted_id}")
+    log_line(f"ID: {result.inserted_id}")
 
 def update_battle_log(battlelog_json, tag, battlelog_persisted):
     persisted_itens = battlelog_persisted.get('items', [])
@@ -32,19 +41,19 @@ def update_battle_log(battlelog_json, tag, battlelog_persisted):
     attempts = 0
 
     while current_json_date != target_date and attempts < max_iterations:
-        print("Not found yet.")
+        log_line("Not found yet.")
         attempts += 1
         current_json_date = json_itens[attempts]["battleTime"]
 
-    print(f'Updating {attempts} battle log ')
+    log_line(f'Updating {attempts} battle log ')
     result = collection.update_one({'tag': tag}, {'$push': {'items': {  '$each': json_itens[:attempts], '$position': 0 }}})
 
 if len(sys.argv) < 2:
-    print("Tag not found.")
+    log_line("Tag not found.")
     quit()
 
 tag = sys.argv[1]
-print(f'Begin with tag: {tag}')
+log_line(f'Begin with tag: {tag}')
 
 client = MongoClient()
 db = client['brawlstars_crawler']
