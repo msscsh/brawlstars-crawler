@@ -4,3 +4,4 @@ api_key
 cypress.env.json
 
 docker/mongodb/data/
+python.log
