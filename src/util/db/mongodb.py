@@ -22,11 +22,11 @@ def update_db_player_battlelog_data(tag, api_player_battlelog_items):
     collection = use_collection_battlelog()
     result = collection.update_one({'tag': tag}, {'$push': {'items': {  '$each': api_player_battlelog_items, '$position': 0 }}})
 
-def increase_player_battelog_column(tag, name):
+def increase_player_battelog_column(tag, name, value):
     log_line(f'One {name} to player {tag}')
     collection = use_collection_battlelog()
-    collection.update_one({'tag': tag}, {"$inc": {name: 1}})
-    
+    collection.update_one({'tag': tag}, {"$inc": {name: value}})
+
 def init_db_brawlstars_crawler():
 	client = MongoClient()
 	db = client['brawlstars_crawler']

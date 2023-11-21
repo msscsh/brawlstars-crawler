@@ -8,11 +8,13 @@ from util.db.mongodb import increase_player_battelog_column, get_db_player_battl
 
 def count_players_score(item):
     if item["battle"]["result"] == "victory":
-        increase_player_battelog_column(tag, 'wins')
+        increase_player_battelog_column(tag, 'wins', 1)
     if item["battle"]["result"] == "defeat":
-        increase_player_battelog_column(tag, 'losses')
+        increase_player_battelog_column(tag, 'losses', 1)
     if item["battle"]["result"] == "draw":
-        increase_player_battelog_column(tag, 'draws')
+        increase_player_battelog_column(tag, 'draws', 1)
+    if item["battle"].get("duration"):
+        increase_player_battelog_column(tag, 'duration', item["battle"].get("duration"))
 
 def identify_index_last_persisted_change(last_updated_item_date, api_items):
     index = 0
