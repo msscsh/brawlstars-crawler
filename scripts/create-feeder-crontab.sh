@@ -6,7 +6,7 @@ else
   echo "BS_CRAWLER_HOME: $BS_CRAWLER_HOME"
 fi
 
-CRONEXEC="cd $BS_CRAWLER_HOME && python3 src/battlelog/feeder.py 2QPVJ099C"
+CRONEXEC="cd $BS_CRAWLER_HOME && python3 src/feeder/battlelog.py 2QPVJ099C"
 (crontab -l ; echo "*/13 * * * * $CRONEXEC") | crontab -
 
 echo "OK"
