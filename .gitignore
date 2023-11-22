@@ -15,4 +15,4 @@ api_key
 
 python.log
 hunted_player_tags.log
-banned_players_tag.log
+banned_url.log
