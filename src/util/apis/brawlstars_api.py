@@ -14,10 +14,27 @@ def add_banned_url_to_file(tag):
     with open(file_path, 'a') as hunted_file:
         hunted_file.write(f'{tag}\n')
 
-def clean_trash_columns_from_json(json_from_api):
-	to_remove = ["paging"]
+def clean_columns_from_json(json_from_api, to_remove):
 	json_less = {key: value for key, value in json_from_api.items() if key not in to_remove}
-	return json.dumps(json_less, indent=2, ensure_ascii=False)
+	return json_less
+
+def do_request_for_list(url, list_name):
+	json = do_request(url)
+	json_final = {list_name: json['items']}
+	return json_final
+
+def manipulate_json_before_return(json_data):
+    if isinstance(json_data, list):
+        if all(isinstance(item, dict) for item in json_data):
+            print("List of Dictionaries")
+        else:
+            print("List with elements of different types")
+    elif isinstance(json_data, dict):
+        print("Single Dictionary")
+        clean_columns_from_json(json_data, ["paging"])
+    else:
+        print("Unknown Type")
+    return json_data;
 
 def do_request(url):
 	with open('api_key', 'r') as arquivo:
@@ -27,7 +44,7 @@ def do_request(url):
 	    }
 	    response = requests.get(url, headers=headers)
 	    if response.status_code == 200:
-	    	return clean_trash_columns_from_json(response.json())
+	    	return manipulate_json_before_return(response.json())
 	    if response.status_code == 404:
 	    	log_line(f'Error: 404 Not Found {url}')
 	    	add_banned_url_to_file(url)
@@ -38,54 +55,92 @@ def do_request(url):
 
 def get_api_players_data(tag):
 	url = f'{base_url_players}{tag}'
-	return do_request(url)
+	json = do_request(url)
+	json['tag'] = tag
+	return clean_columns_from_json(json, ["brawlers", "club"])
 
 def get_api_players_battlelog_data(tag):
 	url = f'{base_url_players}{tag}/battlelog'
-	return do_request(url)
+	json = do_request_for_list(url, 'battle')
+	json = {"tag": tag, **json}
+	return json
 
 def get_api_clubs(tag):
 	url = f'{base_url_clubs}{tag}'
-	return do_request(url)
+	json = do_request(url)
+	json['tag'] = tag
+	return clean_columns_from_json(json, ["members"])
 
 def get_api_clubs_members(tag):
 	url = f'{base_url_clubs}{tag}/members'
-	return do_request(url)
+	json = do_request_for_list(url, 'members')
+	json = {"tag": tag, **json}
+	return json
 
 def get_api_rankings_countrycode_powerplay_seasons(country_code):
 	url = f'{base_url_rankings}/{country_code}/powerplay/seasons'
-	return do_request(url)
+	json = do_request_for_list(url, 'pl_seasons')
+	json = {"country_code": country_code, **json}
+	return json
 
 def get_api_rankings_countrycode_powerplay_seasons_seasonsid(country_code, seasonid):
 	url = f'{base_url_rankings}/{country_code}/powerplay/seasons/{seasonid}'
-	return do_request(url)
+	json = do_request_for_list(url, 'pl_seasons_ranking')
+	json = {"country_code": country_code, **json}
+	json = {"seasonid": seasonid, **json}
+	return json
 
 def get_api_rankings_countrycode_clubs(country_code):
 	url = f'{base_url_rankings}/{country_code}/clubs'
-	return do_request(url)
+	json = do_request_for_list(url, 'clubs_ranking')
+	json = {"country_code": country_code, **json}
+	return json
 
-def get_api_rankings_countrycode(country_code):
+def get_api_rankings_countrycode_brawler_brawlerid(country_code, brawlersid):
 	url = f'{base_url_rankings}/{country_code}/brawlers/{brawlersid}'
-	return do_request(url)
+	json = do_request_for_list(url, 'brawlers_ranking')
+	json = {"country_code": country_code, **json}
+	json = {"brawlersid": brawlersid, **json}
+	return json
 
-def get_api_rankings_countrycode(country_code):
-	url = f'{base_url_rankings}/players'
-	return do_request(url)
+def get_api_rankings_countrycode_players(country_code):
+	url = f'{base_url_rankings}/{country_code}/players'
+	json = do_request_for_list(url, 'players_ranking')
+	json = {"country_code": country_code, **json}
+	return json
 
 def get_api_brawlers():
 	url = f'{base_url_brawlers}'
+	json = do_request_for_list(url, 'brawlers')
+	return json
+
+def get_api_brawler_brawlerid(brawler_id):
+	url = f'{base_url_brawlers}/{brawler_id}'
 	return do_request(url)
 
-def get_api_brawler(id):
-	url = f'{base_url_brawlers}/{id}'
-	return do_request(url)
-
-def get_api_events_rotation(id):
-	url = f'{base_url_events}/{id}'
+def get_api_events_rotation():
+	url = f'{base_url_events}'
 	return do_request(url)
 
 def main(tag):
-	print(get_api_players_data(tag))
+	json_less = get_api_players_data(tag)
+	json_less = get_api_players_battlelog_data(tag)
+
+	json_less = get_api_clubs(tag)
+	json_less = get_api_clubs_members(tag)
+
+	json_less = get_api_rankings_countrycode_powerplay_seasons('global')
+	json_less = get_api_rankings_countrycode_powerplay_seasons_seasonsid('global', 57)
+	json_less = get_api_rankings_countrycode_clubs('global')
+	json_less = get_api_rankings_countrycode_brawler_brawlerid('global', 16000000)
+	json_less = get_api_rankings_countrycode_players('global')
+
+	json_less = get_api_brawlers()
+	json_less = get_api_brawler_brawlerid(16000000)
+
+	json_less = get_api_events_rotation()
+
+	print(json.dumps(json_less, indent=2, ensure_ascii=False))
 
 
 base_url='https://api.brawlstars.com/v1'
