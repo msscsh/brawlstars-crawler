@@ -14,7 +14,6 @@ def get_db_player_battlelog_data(tag):
 def insert_db_player_battlelog_data(tag, api_player_battlelog):
     log_line(f'Inserting player with battlelog')
     collection = use_collection_battlelog()
-    api_player_battlelog['tag'] = tag
     result = collection.insert_one(api_player_battlelog)	
 
 def update_db_player_battlelog_data(tag, api_player_battlelog_items):
