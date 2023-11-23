@@ -16,10 +16,10 @@ def insert_db_player_battlelog_data(tag, api_player_battlelog):
     collection = use_collection_battlelog()
     result = collection.insert_one(api_player_battlelog)	
 
-def update_db_player_battlelog_data(tag, api_player_battlelog_items):
-    log_line(f'Updating {len(api_player_battlelog_items)} battlelog item(s)')
+def update_db_player_battlelog_data(tag, api_player_battlelog_battles):
+    log_line(f'Updating {len(api_player_battlelog_battles)} battlelog battle(s)')
     collection = use_collection_battlelog()
-    result = collection.update_one({'tag': tag}, {'$push': {'items': {  '$each': api_player_battlelog_items, '$position': 0 }}})
+    result = collection.update_one({'tag': tag}, {'$push': {'battles': {  '$each': api_player_battlelog_battles, '$position': 0 }}})
 
 def increase_player_battelog_column(tag, name, value):
     log_line(f'One {name} to player {tag}')

@@ -61,7 +61,7 @@ def get_api_players_data(tag):
 
 def get_api_players_battlelog_data(tag):
 	url = f'{base_url_players}{tag}/battlelog'
-	json = do_request_for_list(url, 'battle')
+	json = do_request_for_list(url, 'battles')
 	json = {"tag": tag, **json}
 	return json
 

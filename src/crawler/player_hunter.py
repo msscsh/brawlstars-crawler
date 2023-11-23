@@ -13,11 +13,11 @@ def get_players_trophy_count(tag):
     else:
         return 0;
 
-def get_tags_in_this_match(player_battlelog_items):
+def get_tags_in_this_match(player_battlelog_battles):
     all_tags = []
-    for item in player_battlelog_items:
-        if item['battle']['mode'].lower() not in not_hunted_event_list:
-            for team in item['battle']['teams']:
+    for battlelog in player_battlelog_battles:
+        if battlelog['battle']['mode'].lower() not in not_hunted_event_list:
+            for team in battlelog['battle']['teams']:
                 for player in team:
                     all_tags.append(player['tag'][1:])
     return set(all_tags)
@@ -38,16 +38,16 @@ def recursively_hunt_players(tag, deep):
         if trophies >= 50000 or tag == "2QPVJ099C":
 
             add_tag_to_controll_file(tag)
-            player_battlelog_items = []
+            player_battlelog_battles = []
 
             db_player_battlelog = get_db_player_battlelog_data(tag)
             if db_player_battlelog:
-                player_battlelog_items = db_player_battlelog.get('items', [])
+                player_battlelog_battles = db_player_battlelog.get('battles', [])
             else:
                 api_player_battlelog = get_api_players_battlelog_data(tag)
-                player_battlelog_items = api_player_battlelog.get('items', [])
+                player_battlelog_battles = api_player_battlelog.get('battles', [])
 
-            all_tags = get_tags_in_this_match(player_battlelog_items)
+            all_tags = get_tags_in_this_match(player_battlelog_battles)
 
             for tagii in all_tags:
                 print(f'TAG Father: {tag} to son {tagii} ')
@@ -61,4 +61,4 @@ def recursively_hunt_players(tag, deep):
 tag = "2QPVJ099C"
 not_hunted_event_list = [ 'soloshowdown', 'duoshowdown', 'biggame', 'bossfight', 'roborumble', 'takedown', 'lonestar', 'presentplunder', 'supercityrampage', 'holdthetrophy', 'trophythieves', 'duels', 'botdrop', 'hunters', 'laststand', 'snowtelthieves', 'unknown' ]
 
-recursively_hunt_players(tag, 5)
+recursively_hunt_players(tag, 2)
