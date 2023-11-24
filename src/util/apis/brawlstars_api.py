@@ -50,7 +50,7 @@ def do_request(url):
 	    	add_banned_url_to_file(url)
 	    	return None
 	    else:
-	    	log_line(f'Error: {response.status_code}')
+	    	log_line(f'Error: {response.status_code} headers: {response.headers}')
 	    	return None
 
 def get_api_players_data(tag):
@@ -64,6 +64,12 @@ def get_api_players_battlelog_data(tag):
 	json = do_request_for_list(url, 'battles')
 	json = {"tag": tag, **json}
 	return json
+
+def get_api_players_battlelog_data_with_name(tag):
+    player = get_api_players_data(tag)
+    api_player_battlelog = get_api_players_battlelog_data(tag)
+    api_player_battlelog = {'name': player['name'], **api_player_battlelog}
+    return api_player_battlelog
 
 def get_api_clubs(tag):
 	url = f'{base_url_clubs}{tag}'
@@ -123,22 +129,22 @@ def get_api_events_rotation():
 	return do_request(url)
 
 def main(tag):
-	json_less = get_api_players_data(tag)
-	json_less = get_api_players_battlelog_data(tag)
+	# json_less = get_api_players_data(tag)
+	# json_less = get_api_players_battlelog_data(tag)
 
-	json_less = get_api_clubs(tag)
+	# json_less = get_api_clubs(tag)
 	json_less = get_api_clubs_members(tag)
 
-	json_less = get_api_rankings_countrycode_powerplay_seasons('global')
-	json_less = get_api_rankings_countrycode_powerplay_seasons_seasonsid('global', 57)
-	json_less = get_api_rankings_countrycode_clubs('global')
-	json_less = get_api_rankings_countrycode_brawler_brawlerid('global', 16000000)
-	json_less = get_api_rankings_countrycode_players('global')
+	# json_less = get_api_rankings_countrycode_powerplay_seasons('global')
+	# json_less = get_api_rankings_countrycode_powerplay_seasons_seasonsid('global', 57)
+	# json_less = get_api_rankings_countrycode_clubs('global')
+	# json_less = get_api_rankings_countrycode_brawler_brawlerid('global', 16000000)
+	# json_less = get_api_rankings_countrycode_players('global')
 
-	json_less = get_api_brawlers()
-	json_less = get_api_brawler_brawlerid(16000000)
+	# json_less = get_api_brawlers()
+	# json_less = get_api_brawler_brawlerid(16000000)
 
-	json_less = get_api_events_rotation()
+	# json_less = get_api_events_rotation()
 
 	print(json.dumps(json_less, indent=2, ensure_ascii=False))
 
