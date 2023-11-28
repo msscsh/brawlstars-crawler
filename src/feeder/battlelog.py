@@ -65,7 +65,7 @@ def identify_index_last_persisted_change(last_updated_battle_date, api_battles, 
     index = 0
     current_battle_date = api_battles[0]["battleTime"]
     while index < len(api_battles):
-        log_line_in_debug(f'dates compared in API return index={index} DB({last_updated_battle_date}) API({current_battle_date})')
+        log_line_in_debug(f'dates compared in API return index={index} DB({last_updated_battle_date}) API({current_battle_date})', False)
         if current_battle_date > last_updated_battle_date:
             index += 1
             current_battle_date = api_battles[index]["battleTime"]
