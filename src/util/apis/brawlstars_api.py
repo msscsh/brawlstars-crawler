@@ -2,7 +2,7 @@ import os, sys, json, requests
 
 project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(project_path)
-from util.logger import log_line
+from util.logger import log_line, log_line_in_debug
 
 def add_banned_url_to_file(tag):
     file_path = 'banned_url.log'
@@ -26,14 +26,14 @@ def do_request_for_list(url, list_name):
 def manipulate_json_before_return(json_data):
     if isinstance(json_data, list):
         if all(isinstance(item, dict) for item in json_data):
-            print("List of Dictionaries")
+            log_line_in_debug("List of Dictionaries")
         else:
-            print("List with elements of different types")
+            log_line_in_debug("List with elements of different types")
     elif isinstance(json_data, dict):
-        print("Single Dictionary")
+        log_line_in_debug("Single Dictionary")
         clean_columns_from_json(json_data, ["paging"])
     else:
-        print("Unknown Type")
+        log_line_in_debug("Unknown Type")
     return json_data;
 
 def do_request(url):
