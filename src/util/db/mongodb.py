@@ -3,7 +3,7 @@ from pymongo import MongoClient
 
 project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(project_path)
-from util.logger import log_line
+from util.logger import log_line, log_line_in_debug
 
 def get_db_player_battlelog_data(tag):
 	log_line(f'Retriving player battlelog')
@@ -22,7 +22,7 @@ def update_db_player_battlelog_data(tag, api_player_battlelog_battles):
     result = collection.update_one({'tag': tag}, {'$push': {'battles': {  '$each': api_player_battlelog_battles, '$position': 0 }}})
 
 def increase_player_battelog_column(tag, name, value):
-    log_line(f'One {name} to player {tag}')
+    log_line_in_debug(f'One {name} to player {tag}', False)
     collection = use_collection_battlelog()
     collection.update_one({'tag': tag}, {"$inc": {name: value}})
 
