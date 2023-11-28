@@ -17,7 +17,7 @@ def insert_db_player_battlelog_data(tag, api_player_battlelog):
     result = collection.insert_one(api_player_battlelog)	
 
 def update_db_player_battlelog_data(tag, api_player_battlelog_battles):
-    log_line(f'Updating {len(api_player_battlelog_battles)} battlelog battle(s)')
+    log_line(f'Updating {len(api_player_battlelog_battles)} battlelog battle(s) for player {tag}')
     collection = use_collection_battlelog()
     result = collection.update_one({'tag': tag}, {'$push': {'battles': {  '$each': api_player_battlelog_battles, '$position': 0 }}})
 
@@ -35,5 +35,3 @@ def use_collection_battlelog():
 	db = init_db_brawlstars_crawler()
 	collection = db['battlelog']
 	return collection
-
-print('imported mongodb')
