@@ -51,6 +51,7 @@ def do_request(url):
 	    	return None
 	    if response.status_code == 429:
 	    	log_line(f'Error: 429 Too many requests - {url}')
+	    	log_line(f'Aborting application')
 	    	quit() #Retry will not change this cenario. Stop trying until fix 
 	    else:
 	    	log_line(f'Error: {response.status_code} headers: {response.headers}')
