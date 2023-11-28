@@ -93,7 +93,7 @@ def main(tag):
     log_line(f'Begin with tag: {tag}')
     # add_tag_into_crontab_file(tag)
 
-    api_player_battlelog = get_api_players_battlelog_data_with_name(tag)
+    api_player_battlelog = get_db_player_battlelog_data(tag)
 
     if api_player_battlelog:
         db_player_battlelog = get_db_player_battlelog_data(tag)
