@@ -3,7 +3,7 @@ import os, sys, json
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
 from util.logger import log_line, log_line_in_debug
-from util.apis.brawlstars_api import get_api_players_battlelog_data, get_api_clubs_members, get_api_players_battlelog_data_with_name
+from util.apis.brawlstars_api import get_api_clubs_members, get_api_players_battlelog_data_with_name
 from util.db.mongodb import increase_player_battelog_column, get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
 
 def apply_general_battlelog_rules_into_players_score(tag, battle):
@@ -93,7 +93,8 @@ def main(tag):
     log_line(f'Begin with tag: {tag}')
     # add_tag_into_crontab_file(tag)
 
-    api_player_battlelog = get_db_player_battlelog_data(tag)
+    api_player_battlelog = get_api_players_battlelog_data_with_name(tag)
+    log_line_in_debug(api_player_battlelog)
 
     if api_player_battlelog:
         db_player_battlelog = get_db_player_battlelog_data(tag)
