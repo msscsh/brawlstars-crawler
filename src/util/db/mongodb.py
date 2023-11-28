@@ -7,7 +7,7 @@ from util.logger import log_line
 
 def get_db_player_battlelog_data(tag):
 	log_line(f'Retriving player battlelog')
-	collection=use_collection_battlelog()
+	collection = use_collection_battlelog()
 	player_battlelog_persisted = collection.find_one({'tag': tag})
 	return player_battlelog_persisted
 
