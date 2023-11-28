@@ -46,9 +46,12 @@ def do_request(url):
 	    if response.status_code == 200:
 	    	return manipulate_json_before_return(response.json())
 	    if response.status_code == 404:
-	    	log_line(f'Error: 404 Not Found {url}')
+	    	log_line(f'Error: 404 Not Found - {url}')
 	    	add_banned_url_to_file(url)
 	    	return None
+	    if response.status_code == 429:
+	    	log_line(f'Error: 429 Too many requests - {url}')
+	    	quit() #Retry will not change this cenario. Stop trying until fix 
 	    else:
 	    	log_line(f'Error: {response.status_code} headers: {response.headers}')
 	    	return None
