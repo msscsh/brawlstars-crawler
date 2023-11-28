@@ -26,14 +26,14 @@ def do_request_for_list(url, list_name):
 def manipulate_json_before_return(json_data):
     if isinstance(json_data, list):
         if all(isinstance(item, dict) for item in json_data):
-            log_line_in_debug("List of Dictionaries")
+            log_line_in_debug("List of Dictionaries", false)
         else:
-            log_line_in_debug("List with elements of different types")
+            log_line_in_debug("List with elements of different types", false)
     elif isinstance(json_data, dict):
-        log_line_in_debug("Single Dictionary")
+        log_line_in_debug("Single Dictionary", false)
         clean_columns_from_json(json_data, ["paging"])
     else:
-        log_line_in_debug("Unknown Type")
+        log_line_in_debug("Unknown Type", false)
     return json_data;
 
 def do_request(url):
