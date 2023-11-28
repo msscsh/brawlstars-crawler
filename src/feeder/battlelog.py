@@ -1,17 +1,29 @@
-import os, sys
+import os, sys, json
 
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
-from util.logger import log_line
+from util.logger import log_line, log_line_in_debug
 from util.apis.brawlstars_api import get_api_players_battlelog_data, get_api_clubs_members, get_api_players_battlelog_data_with_name
 from util.db.mongodb import increase_player_battelog_column, get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
 
 def apply_general_battlelog_rules_into_players_score(tag, battle):
-    # print(battle)
-    solo_duo_game = [ 'soloshowdown', 'duoshowdown']
+    log_line_in_debug(json.dumps(battle, indent=2, ensure_ascii=False))
+
     especial_game = ['biggame', 'bossfight', 'roborumble', 'takedown', 'lonestar', 'presentplunder', 'supercityrampage', 'holdthetrophy', 'trophythieves', 'duels', 'botdrop', 'hunters', 'laststand', 'snowtelthieves', 'unknown' ]
 
-    if battle["battle"]["mode"].lower() in solo_duo_game:
+    if battle["event"]["id"] == 0:
+        increase_player_battelog_column(tag, 'mapMakerPlays', 1)
+
+    elif  battle["battle"]["type"].lower() == "soloranked" or battle["battle"]["type"].lower() == "teamranked":
+        if battle["battle"]["result"] == "victory":
+            increase_player_battelog_column(tag, 'plWins', 1)
+        if battle["battle"]["result"] == "defeat":
+            increase_player_battelog_column(tag, 'plLosses', 1)
+        if battle["battle"].get("starPlayer") is not None:
+            if battle["battle"].get("starPlayer")['tag'][1:] == tag:
+                increase_player_battelog_column(tag, 'plStarPlayer', 1)
+
+    elif  battle["battle"]["mode"].lower() == "soloshowdown":
         if battle["battle"]["rank"] == 1:
             increase_player_battelog_column(tag, 'sdFistPlace', 1)
         if battle["battle"]["rank"] == 2:
@@ -20,20 +32,30 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
             increase_player_battelog_column(tag, 'sdThirdPlace', 1)
         if battle["battle"]["rank"] == 4:
             increase_player_battelog_column(tag, 'sdFourthPlace', 1)
+        if battle["battle"]["rank"] >= 5:
+            increase_player_battelog_column(tag, 'sdLosses', 1)
+
+    elif  battle["battle"]["mode"].lower() == "duoshowdown":
+        if battle["battle"]["rank"] == 1:
+            increase_player_battelog_column(tag, 'sdFistPlace', 1)
+        if battle["battle"]["rank"] == 2:
+            increase_player_battelog_column(tag, 'sdSecondPlace', 1)
+        if battle["battle"]["rank"] >= 3:
+            increase_player_battelog_column(tag, 'sdLosses', 1)
     else:
         if battle["battle"]["result"] == "victory":
-            increase_player_battelog_column(tag, 'wins', 1)
+            increase_player_battelog_column(tag, 'ngWins', 1)
         if battle["battle"]["result"] == "defeat":
-            increase_player_battelog_column(tag, 'losses', 1)
+            increase_player_battelog_column(tag, 'ngLosses', 1)
         if battle["battle"]["result"] == "draw":
-            increase_player_battelog_column(tag, 'draws', 1)
+            increase_player_battelog_column(tag, 'ngDraws', 1)
         if battle["battle"].get("duration"):
-            increase_player_battelog_column(tag, 'duration', battle["battle"].get("duration"))
+            increase_player_battelog_column(tag, 'ngDduration', battle["battle"].get("duration"))
         if battle["battle"].get("starPlayer") is not None:
             if battle["battle"].get("starPlayer")['tag'][1:] == tag:
                 increase_player_battelog_column(tag, 'starPlayer', 1)
 
-def count_all_player_score_for_first_time(tag, battles):
+def count_all_player_score_from_battles(tag, battles):
     index = 0
     while index < len(battles):
         apply_general_battlelog_rules_into_players_score(tag, battles[index])
@@ -41,21 +63,14 @@ def count_all_player_score_for_first_time(tag, battles):
 
 def identify_index_last_persisted_change(last_updated_battle_date, api_battles, tag):
     index = 0
-    log_line(f'Last updated battle was at {last_updated_battle_date}')
     current_battle_date = api_battles[0]["battleTime"]
-    while index < 25:
-        if current_battle_date == last_updated_battle_date:
-            print(f'datas iguais em {index} data do banco {last_updated_battle_date} com data da api {current_battle_date}')
-            break
-        else:
-            print(f'datas comparadas no {index} data do banco {last_updated_battle_date} com data da api {current_battle_date}')
-            apply_general_battlelog_rules_into_players_score(tag, api_battles[index])
+    while index < len(api_battles):
+        log_line_in_debug(f'dates compared in API return index={index} DB({last_updated_battle_date}) API({current_battle_date})')
+        if current_battle_date > last_updated_battle_date:
             index += 1
             current_battle_date = api_battles[index]["battleTime"]
-
-    print('pulou?')
-
-    log_line(f'Finished {current_battle_date}')
+        if current_battle_date == last_updated_battle_date:
+            break
     return index
 
 def scan_all_players_from_club(club_tag):
@@ -72,7 +87,7 @@ def add_tag_into_crontab_file(tag):
         with open(file_path, 'w') as novo_arquivo:
             pass
     with open(file_path, 'a') as hunted_file:
-        hunted_file.write(f'*/10 * * * * cd brawlstars-crawler && python3 src/feeder/battlelog.py {tag}\n')
+        hunted_file.write(f'*/10 * * * * cd $BS_CRAWLER_HOME && python3 src/feeder/battlelog.py {tag}\n')
 
 def main(tag):
     log_line(f'Begin with tag: {tag}')
@@ -85,12 +100,13 @@ def main(tag):
 
         if not db_player_battlelog:
             insert_db_player_battlelog_data(tag, api_player_battlelog)
-            count_all_player_score_for_first_time(tag, api_player_battlelog.get('battles', []))
+            count_all_player_score_from_battles(tag, api_player_battlelog.get('battles', []))
         else:
             last_updated_battle_date = db_player_battlelog.get('battles', [])[0]['battleTime']
             api_battles = api_player_battlelog.get('battles', [])
             cut = identify_index_last_persisted_change(last_updated_battle_date, api_battles, tag)
             update_db_player_battlelog_data(tag, api_battles[:cut])
+            count_all_player_score_from_battles(tag, api_battles[:cut])
     else:
         log_line(f'Failed getting data from API:{tag}')
 
