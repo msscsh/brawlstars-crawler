@@ -1,4 +1,4 @@
-import os, sys, json
+import os, sys
 
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
@@ -7,7 +7,7 @@ from util.apis.brawlstars_api import get_api_clubs_members, get_api_players_batt
 from util.db.mongodb import increase_player_battelog_column, get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
 
 def apply_general_battlelog_rules_into_players_score(tag, battle):
-    log_line_in_debug(json.dumps(battle, indent=2, ensure_ascii=False))
+    log_line_in_debug(battle, true)
 
     especial_game = ['biggame', 'bossfight', 'roborumble', 'takedown', 'lonestar', 'presentplunder', 'supercityrampage', 'holdthetrophy', 'trophythieves', 'duels', 'botdrop', 'hunters', 'laststand', 'snowtelthieves', 'unknown' ]
 
@@ -94,7 +94,7 @@ def main(tag):
     # add_tag_into_crontab_file(tag)
 
     api_player_battlelog = get_api_players_battlelog_data_with_name(tag)
-    log_line_in_debug(api_player_battlelog)
+    log_line_in_debug(api_player_battlelog, false)
 
     if api_player_battlelog:
         db_player_battlelog = get_db_player_battlelog_data(tag)
