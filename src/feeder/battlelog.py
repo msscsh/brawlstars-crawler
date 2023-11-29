@@ -4,56 +4,9 @@ project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
 from util.logger import log_line, log_line_in_debug
 from util.apis.brawlstars_api import get_api_clubs_members, get_api_players_battlelog_data_with_name
-from util.db.mongodb import increase_player_battelog_column, get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
+from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
 
-def apply_general_battlelog_rules_into_players_score(tag, battle):
-    log_line_in_debug(battle, True)
-
-    especial_game = ['biggame', 'bossfight', 'roborumble', 'takedown', 'lonestar', 'presentplunder', 'supercityrampage', 'holdthetrophy', 'trophythieves', 'duels', 'botdrop', 'hunters', 'laststand', 'snowtelthieves', 'unknown' ]
-
-    if battle["event"]["id"] == 0:
-        increase_player_battelog_column(tag, 'mapMakerPlays', 1)
-
-    elif  battle["battle"]["type"].lower() == "soloranked" or battle["battle"]["type"].lower() == "teamranked":
-        if battle["battle"]["result"] == "victory":
-            increase_player_battelog_column(tag, 'plWins', 1)
-        if battle["battle"]["result"] == "defeat":
-            increase_player_battelog_column(tag, 'plLosses', 1)
-        if battle["battle"].get("starPlayer") is not None:
-            if battle["battle"].get("starPlayer")['tag'][1:] == tag:
-                increase_player_battelog_column(tag, 'plStarPlayer', 1)
-
-    elif  battle["battle"]["mode"].lower() == "soloshowdown":
-        if battle["battle"]["rank"] == 1:
-            increase_player_battelog_column(tag, 'sdFistPlace', 1)
-        if battle["battle"]["rank"] == 2:
-            increase_player_battelog_column(tag, 'sdSecondPlace', 1)
-        if battle["battle"]["rank"] == 3:
-            increase_player_battelog_column(tag, 'sdThirdPlace', 1)
-        if battle["battle"]["rank"] == 4:
-            increase_player_battelog_column(tag, 'sdFourthPlace', 1)
-        if battle["battle"]["rank"] >= 5:
-            increase_player_battelog_column(tag, 'sdLosses', 1)
-
-    elif  battle["battle"]["mode"].lower() == "duoshowdown":
-        if battle["battle"]["rank"] == 1:
-            increase_player_battelog_column(tag, 'sdFistPlace', 1)
-        if battle["battle"]["rank"] == 2:
-            increase_player_battelog_column(tag, 'sdSecondPlace', 1)
-        if battle["battle"]["rank"] >= 3:
-            increase_player_battelog_column(tag, 'sdLosses', 1)
-    else:
-        if battle["battle"]["result"] == "victory":
-            increase_player_battelog_column(tag, 'ngWins', 1)
-        if battle["battle"]["result"] == "defeat":
-            increase_player_battelog_column(tag, 'ngLosses', 1)
-        if battle["battle"]["result"] == "draw":
-            increase_player_battelog_column(tag, 'ngDraws', 1)
-        if battle["battle"].get("duration"):
-            increase_player_battelog_column(tag, 'ngDduration', battle["battle"].get("duration"))
-        if battle["battle"].get("starPlayer") is not None:
-            if battle["battle"].get("starPlayer")['tag'][1:] == tag:
-                increase_player_battelog_column(tag, 'starPlayer', 1)
+from rules.score_rules import apply_general_battlelog_rules_into_players_score
 
 def count_all_player_score_from_battles(tag, battles):
     index = 0
@@ -77,7 +30,7 @@ def scan_all_players_from_club(club_tag):
     members = get_api_clubs_members(club_tag).get('members')
     index = 0
     while index < len(members):
-        print(members[index])
+        log_line_in_debug(members[index], True)
         main(members[index]['tag'][1:])
         index += 1
 
@@ -119,15 +72,17 @@ if len(sys.argv) < 2:
 
 #Player tag
 if len(sys.argv) == 2:
-    print('Loading player tag')
+    log_line('Loading player tag')
     tag = sys.argv[1]
     main(tag)
 
 #Clubs tag
 if len(sys.argv) >= 3:
-    print('Loading group of clubs')
+    log_line('Loading group of clubs')
     index = 1
     while index < len(sys.argv):
         club_tag = sys.argv[index]
         scan_all_players_from_club(club_tag)
         index += 1
+
+log_line('Ending feeder')
