@@ -20,8 +20,8 @@ def identify_index_last_persisted_change(last_updated_battle_date, api_battles, 
     while index < len(api_battles):
         log_line_in_debug(f'dates compared in API return index={index} DB({last_updated_battle_date}) API({current_battle_date})', False)
         if current_battle_date > last_updated_battle_date:
-            index += 1
             current_battle_date = api_battles[index]["battleTime"]
+            index += 1
         if current_battle_date == last_updated_battle_date:
             break
     return index
@@ -47,7 +47,7 @@ def main(tag):
     # add_tag_into_crontab_file(tag)
 
     api_player_battlelog = get_api_players_battlelog_data_with_name(tag)
-    log_line_in_debug(api_player_battlelog, False)
+    log_line_in_debug(api_player_battlelog, True)
 
     if api_player_battlelog:
         db_player_battlelog = get_db_player_battlelog_data(tag)
