@@ -1,4 +1,4 @@
-import sys
+import sys, json
 from datetime import datetime
 
 def log_line(line):
@@ -11,6 +11,6 @@ def log_line(line):
 def log_line_in_debug(line, isJson):
     if "debug" in sys.argv:
         if isJson:
-            log_line(f'DEBUG JSON :::\n {json.dumps(battle, indent=2, ensure_ascii=False)}')
+            log_line(f'DEBUG JSON :::\n {json.dumps(line, indent=2, ensure_ascii=False)}')
         else:
             log_line(f'DEBUG ::: {line}')
