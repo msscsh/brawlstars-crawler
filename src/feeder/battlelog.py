@@ -2,10 +2,10 @@ import os, sys
 
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
-from util.logger import log_line, log_line_in_debug
-from util.apis.brawlstars_api import get_api_clubs_members, get_api_players_battlelog_data_with_name
-from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
 
+from util.logger import log_line, log_line_in_debug
+from util.apis.brawlstars_api import get_api_clubs, get_api_clubs_members, get_api_players_battlelog_data_with_name
+from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
 from rules.score_rules import apply_general_battlelog_rules_into_players_score
 
 def count_all_player_score_from_battles(tag, battles):
@@ -27,11 +27,12 @@ def identify_index_last_persisted_change(last_updated_battle_date, api_battles, 
     return index
 
 def scan_all_players_from_club(club_tag):
+    clubBand = get_api_clubs(club_tag).get('name')[-1]
     members = get_api_clubs_members(club_tag).get('members')
     index = 0
     while index < len(members):
         log_line_in_debug(members[index], True)
-        main(members[index]['tag'][1:])
+        main(members[index]['tag'][1:], clubBand)
         index += 1
 
 def add_tag_into_crontab_file(tag):
@@ -42,11 +43,14 @@ def add_tag_into_crontab_file(tag):
     with open(file_path, 'a') as hunted_file:
         hunted_file.write(f'*/10 * * * * cd $BS_CRAWLER_HOME && python3 src/feeder/battlelog.py {tag}\n')
 
-def main(tag):
+def main(tag, clubBand):
     log_line(f'Begin with tag: {tag}')
     # add_tag_into_crontab_file(tag)
 
     api_player_battlelog = get_api_players_battlelog_data_with_name(tag)
+    if clubBand:
+        api_player_battlelog = {'clubBand': clubBand, **api_player_battlelog}
+
     log_line_in_debug(api_player_battlelog, True)
 
     if api_player_battlelog:
@@ -74,7 +78,7 @@ if len(sys.argv) < 2:
 if len(sys.argv) == 2:
     log_line('Loading player tag')
     tag = sys.argv[1]
-    main(tag)
+    main(tag, None)
 
 #Clubs tag
 if len(sys.argv) >= 3:
