@@ -8,7 +8,7 @@ from util.logger import log_line, log_line_in_debug
 def get_db_ranking_player_battlelog_data():
 	log_line(f'Retriving ranking player battlelog')
 	collection = use_collection_battlelog()
-	ranking = collection.find().sort('points', -1)
+	ranking = collection.find().sort('points', -1).limit(90)
 	return ranking
 
 def get_db_player_battlelog_data(tag):
