@@ -6,6 +6,12 @@ sys.path.append(project_path)
 from util.logger import log_line
 from util.db.mongodb import get_db_ranking_player_battlelog_data
 
+def write_value(value):
+    return f'<td>{value}</td>'
+
+def write_player_value(player, field):
+    return f'<td>{player.get(field, 0)}</td>'
+
 def write_player_in_ranking_html_file(html):
     file_path = 'ranking.html'
     if not os.path.exists(file_path):
@@ -21,8 +27,21 @@ file = "ranking_player_battlelog"
 html = ""
 ranking = get_db_ranking_player_battlelog_data()
 for index, player in enumerate(ranking):
+
+    strShowdown = f"{sum_showdown_board(player)}/{player.get('sdLosses', 0)}"
+    strNormalGame = f"{player.get('ngWins', 0)}/{player.get('ngLosses', 0)}"
+    strPowerLeague = f"{player.get('plWins', 0)}/{player.get('plLosses', 0)}"
 	# //MAKE THE STEP THAT SAVES YOUR POSITION TO TELL WHO WAS UP AND WHO WAS DOWN.. COMPARE NOW WITH PRE-BASE
-	html = html + '<tr>' + f'<td>{index+1}#</td>' + f'<td>{player.get("clubBand")}</td>' + f'<td>{player.get("name")}</td>' + f'<td>{player.get("starPlayer", 0)}</td>' + f'<td>{sum_showdown_board(player)}/{player.get("sdLosses", 0)}</td>' + f'<td>{player.get("ngWins", 0)}/{player.get("ngLosses", 0)}</td>' + f'<td>{player.get("plWins", 0)}/{player.get("plLosses", 0)}</td>' + '</tr>\n'
+    html += '<tr>'\
+    f'<td>{index+1}#</td>'\
+    f"{write_player_value(player, 'clubBand')}"\
+    f"{write_player_value(player, 'name')}"\
+    f"{write_player_value(player, 'points')}"\
+    f"{write_player_value(player, 'starPlayer')}"\
+    f"{write_value(strShowdown)}"\
+    f"{write_value(strNormalGame)}"\
+    f"{write_value(strPowerLeague)}"\
+    '</tr>\n'
 
 write_player_in_ranking_html_file(html)
 
