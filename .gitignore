@@ -17,3 +17,4 @@ python.log
 hunted_player_tags.log
 banned_url.log
 cron_tags.log
+init.log
