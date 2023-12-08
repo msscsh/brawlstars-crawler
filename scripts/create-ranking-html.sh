@@ -11,7 +11,7 @@ mv -f ranking.html $1/
 
 cd $1
 
-sed '53,143d; 54r ranking.html' index.html > index-aux.html
+sed '53,142d; 54r ranking.html' index.html > index-aux.html
 awk 'NR<53 {print}  NR==53 {system("cat ranking.html"); system("echo ");} NR>53 {print}' index-aux.html > index.html
 awk -v date="$(date "+%d/%m/%y às %H:%M")" 'NR==33 {$0="<h3>Última atualização: " date "</h3>"} 1' index.html > index-aux.html
 mv -f index-aux.html index.html

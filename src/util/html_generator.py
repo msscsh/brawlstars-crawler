@@ -4,7 +4,7 @@ project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
 
 from util.logger import log_line
-from util.db.mongodb import get_db_ranking_player_battlelog_data
+from util.db.mongodb import get_db_ranking_player_battlelog_data, set_db_player_field_value
 
 def write_value(value):
     return f'<td>{value}</td>'
@@ -28,12 +28,22 @@ html = ""
 ranking = get_db_ranking_player_battlelog_data()
 for index, player in enumerate(ranking):
 
+    oldPosition = int(player.get('position')[-1])
+    set_db_player_field_value(player.get('tag'), 'position', index+1)
+    emoji = ''
+    if index+1 == oldPosition :
+        emoji = ''
+    elif index+1 < oldPosition :
+        emoji = '🚀'
+    elif index+1 > oldPosition :
+        emoji = '🔻'
+
     strShowdown = f"{sum_showdown_board(player)}/{player.get('sdLosses', 0)}"
     strNormalGame = f"{player.get('ngWins', 0)}/{player.get('ngLosses', 0)}"
     strPowerLeague = f"{player.get('plWins', 0)}/{player.get('plLosses', 0)}"
-	# //MAKE THE STEP THAT SAVES YOUR POSITION TO TELL WHO WAS UP AND WHO WAS DOWN.. COMPARE NOW WITH PRE-BASE
+
     html += '<tr>'\
-    f'<td>{index+1}#</td>'\
+    f'<td>{emoji}{index+1}#</td>'\
     f"{write_player_value(player, 'clubBand')}"\
     f"{write_player_value(player, 'name')}"\
     f"{write_player_value(player, 'points')}"\
