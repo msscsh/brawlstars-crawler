@@ -17,8 +17,10 @@ awk -v date="$(date "+%d/%m/%y às %H:%M")" 'NR==33 {$0="<h3>Última atualizaç�
 mv -f index-aux.html index.html
 
 git status >> $BS_CRAWLER_HOME/init.log
+git config commit.gpgsign false
 git add index.html ranking.html
 git commit -m "[auto] atualização de placar"
 git push
+git config commit.gpgsign true
 
 cd -
