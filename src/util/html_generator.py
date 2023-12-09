@@ -28,7 +28,10 @@ html = ""
 ranking = get_db_ranking_player_battlelog_data()
 for index, player in enumerate(ranking):
 
-    oldPosition = int(player.get('position')[-1])
+    oldPosition = 90
+    if player.get('position'):
+        oldPosition = int(player.get('position'))
+
     set_db_player_field_value(player.get('tag'), 'position', index+1)
     emoji = ''
     if index+1 == oldPosition :
