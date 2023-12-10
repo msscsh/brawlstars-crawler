@@ -34,12 +34,20 @@ for index, player in enumerate(ranking):
 
     set_db_player_field_value(player.get('tag'), 'position', index+1)
     emoji = ''
+
+    if index+1 == 1:
+        emoji += '🥇'
+    if index+1 == 2:
+        emoji += '🥈'
+    if index+1 == 3:
+        emoji += '🥉'
+
     if index+1 == oldPosition :
-        emoji = ''
+        emoji += ''
     elif index+1 < oldPosition :
-        emoji = '🚀'
+        emoji += '🚀'
     elif index+1 > oldPosition :
-        emoji = '🔻'
+        emoji += '🔻'
 
     strShowdown = f"{sum_showdown_board(player)}/{player.get('sdLosses', 0)}"
     strNormalGame = f"{player.get('ngWins', 0)}/{player.get('ngLosses', 0)}"
