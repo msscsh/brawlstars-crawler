@@ -4,11 +4,21 @@ project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 sys.path.append(project_path)
 from util.logger import log_line, log_line_in_debug
 
+def add_tag_in_reprocess_file(tag):
+    file_path = 'failed_tag.log'
+
+    if not os.path.exists(file_path):
+        with open(file_path, 'w') as new_file:
+            pass
+
+    with open(file_path, 'a') as failed_tag_file:
+        failed_tag_file.write(f'{tag}\n')
+
 def add_banned_url_to_file(tag):
     file_path = 'banned_url.log'
 
     if not os.path.exists(file_path):
-        with open(file_path, 'w') as novo_arquivo:
+        with open(file_path, 'w') as new_file:
             pass
 
     with open(file_path, 'a') as hunted_file:
@@ -53,6 +63,9 @@ def do_request(url):
 	    	log_line(f'Error: 429 Too many requests - {url}')
 	    	log_line(f'Aborting application')
 	    	quit() #Retry will not change this cenario. Stop trying until fix 
+	    if response.status_code == 500:
+	    	log_line(f'Error: 500 Internal Server Error - {url}')
+	    	return response.json()
 	    else:
 	    	log_line(f'Error: {response.status_code} headers: {response.headers}')
 	    	return None
@@ -60,20 +73,32 @@ def do_request(url):
 def get_api_players_data(tag):
 	url = f'{base_url_players}{tag}'
 	json = do_request(url)
-	json['tag'] = tag
-	return clean_columns_from_json(json, ["brawlers", "club"])
+	if json:
+		json['tag'] = tag
+		return clean_columns_from_json(json, ["brawlers", "club"])
+	else:
+		return None
 
 def get_api_players_battlelog_data(tag):
 	url = f'{base_url_players}{tag}/battlelog'
-	json = do_request_for_list(url, 'battles')
-	json = {"tag": tag, **json}
-	return json
+	json = do_request(url)
+	if json:
+		if json.get('reason', '0') == 'unknownException':
+			add_tag_in_reprocess_file(tag)
+			return None
+		else:
+			json_final = {'battles': json['items']}
+			json_final = {"tag": tag, **json_final}
+			return json_final
 
 def get_api_players_battlelog_data_with_name(tag):
     player = get_api_players_data(tag)
     api_player_battlelog = get_api_players_battlelog_data(tag)
-    api_player_battlelog = {'name': player['name'], **api_player_battlelog}
-    return api_player_battlelog
+    if api_player_battlelog:
+    	api_player_battlelog = {'name': player['name'], **api_player_battlelog}
+    	return api_player_battlelog
+    else:
+    	return None
 
 def get_api_clubs(tag):
 	url = f'{base_url_clubs}{tag}'
