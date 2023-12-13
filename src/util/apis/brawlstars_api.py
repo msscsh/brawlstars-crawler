@@ -14,16 +14,6 @@ def add_tag_in_reprocess_file(tag):
     with open(file_path, 'a') as failed_tag_file:
         failed_tag_file.write(f'{tag}\n')
 
-def add_banned_url_to_file(tag):
-    file_path = 'banned_url.log'
-
-    if not os.path.exists(file_path):
-        with open(file_path, 'w') as new_file:
-            pass
-
-    with open(file_path, 'a') as hunted_file:
-        hunted_file.write(f'{tag}\n')
-
 def clean_columns_from_json(json_from_api, to_remove):
 	json_less = {key: value for key, value in json_from_api.items() if key not in to_remove}
 	return json_less
@@ -57,7 +47,6 @@ def do_request(url):
 	    	return manipulate_json_before_return(response.json())
 	    if response.status_code == 404:
 	    	log_line(f'Error: 404 Not Found - {url}')
-	    	add_banned_url_to_file(url)
 	    	return None
 	    if response.status_code == 429:
 	    	log_line(f'Error: 429 Too many requests - {url}')
