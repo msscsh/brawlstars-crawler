@@ -8,17 +8,24 @@ from util.apis.brawlstars_api import get_api_clubs, get_api_clubs_members, get_a
 from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
 from rules.score_rules import apply_general_battlelog_rules_into_players_score
 
-def reprocess_failed(tag):
+def reprocess_failed():
     tags_failed_again = []
     file = 'failed_tag.log'
     with open(file, 'r') as file_failed_tag:
         for tag in file_failed_tag:
-            if not main(tag, None) :
-                tags_failed_again = tags_failed_again + [tag.strip()]
+            if not main(tag.strip(), None) :
+                if tag.strip() not in tags_failed_again:
+                    tags_failed_again = tags_failed_again + [tag.strip()]
 
-    with open(file, 'w') as file_failed_tag:
-        for tag in tags_failed_again:
-            file_failed_tag.write(tag + '\n')
+    try:
+        os.remove(file)
+        with open(file, 'w') as file_failed_tag:
+            for tag in tags_failed_again:
+                file_failed_tag.write(tag + '\n')
+    except FileNotFoundError:
+        print(f"Not found {file}.")
+    except Exception as e:
+        print(f"Error: {e}")
 
 def count_all_player_score_from_battles(tag, battles):
     index = 0
@@ -79,7 +86,7 @@ if 'debug' in sys.argv:
 
 if 'reprocess_failed' in sys.argv:
     log_line(f'Init "reprocess_failed"')
-    reprocess_failed(sys.argv[1])
+    reprocess_failed()
 
 #Club tag
 elif len(sys.argv) < 2+offset_param:
