@@ -18,7 +18,7 @@ def write_player_in_ranking_html_file(html):
         with open(file_path, 'w') as new_file:
             pass
     with open(file_path, 'w') as hunted_file:
-        hunted_file.write(f'{html}<!-- FINAL DA LINHA 143 -->')
+        hunted_file.write(f'{html}<!-- FINAL 132 -->')
 
 def sum_showdown_board(player):
 	return player.get('sdFistPlace',0) + player.get('sdSecondPlace',0) + player.get('sdThirdPlace',0) + player.get('sdFourthPlace',0)
