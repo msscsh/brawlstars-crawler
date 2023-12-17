@@ -11,16 +11,22 @@ mv -f ranking.html $1/
 
 cd $1
 
-sed '53,142d; 54r ranking.html' index.html > index-aux.html
-awk 'NR<53 {print}  NR==53 {system("cat ranking.html"); system("echo ");} NR>53 {print}' index-aux.html > index.html
-awk -v date="$(date "+%d/%m/%y às %H:%M")" 'NR==33 {$0="<h3>Última atualização: " date "</h3>"} 1' index.html > index-aux.html
+sed '40,129d; 41r ranking.html' index.html > index-aux.html
+awk 'NR<40 {print}  NR==40 {system("cat ranking.html"); system("echo ");} NR>40 {print}' index-aux.html > index.html
+awk -v date="$(date "+%d/%m/%y às %H:%M")" 'NR==29 {$0="<h6>última atualização: " date "</h6>"} 1' index.html > index-aux.html
 mv -f index-aux.html index.html
 
 git status >> $BS_CRAWLER_HOME/init.log
 git config commit.gpgsign false
+git config user.name ${AUTO_GIT_USERNAME}
+git config user.email ${AUTO_GIT_EMAIL}
 git add index.html ranking.html
 git commit -m "[auto] atualização de placar"
 git push
+git config user.name ${GIT_USERNAME}
+git config user.email  ${AUTO_GIT_EMAIL}
 git config commit.gpgsign true
+git config --unset user.name
+git config --unset user.email
 
 cd -
