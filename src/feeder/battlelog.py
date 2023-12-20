@@ -5,7 +5,7 @@ sys.path.append(project_path)
 
 from util.logger import log_line, log_line_in_debug
 from util.apis.brawlstars_api import get_api_clubs, get_api_clubs_members, get_api_players_battlelog_data_with_name
-from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data
+from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data, set_db_player_field_value, clear_players_from_club
 from rules.score_rules import apply_general_battlelog_rules_into_players_score
 
 def reprocess_failed():
@@ -46,11 +46,13 @@ def identify_index_last_persisted_change(last_updated_battle_date, api_battles, 
     return index
 
 def scan_all_players_from_club(club_tag):
+    clear_players_from_club()
     clubBand = get_api_clubs(club_tag).get('name')[-1]
     members = get_api_clubs_members(club_tag).get('members')
     index = 0
     while index < len(members):
         log_line_in_debug(members[index], True)
+        set_db_player_field_value(members[index]['tag'][1:], 'isBRZ', 1)
         print(f'Player {index} ')
         main(members[index]['tag'][1:], clubBand)
         index += 1
