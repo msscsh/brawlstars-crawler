@@ -5,6 +5,10 @@ project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 sys.path.append(project_path)
 from util.logger import log_line, log_line_in_debug
 
+def clear_players_from_club():
+	collection = use_collection_battlelog()
+	collection.update_many({}, {'$set': {'isBRZ': 0}})
+
 def set_db_player_field_value(tag, field, value):
 	log_line(f'Setting players field {field} with {value}')
 	collection = use_collection_battlelog()
@@ -13,7 +17,7 @@ def set_db_player_field_value(tag, field, value):
 def get_db_ranking_player_battlelog_data():
 	log_line(f'Retriving ranking player battlelog')
 	collection = use_collection_battlelog()
-	ranking = collection.find().sort('points', -1).limit(90)
+	ranking = collection.find({'isBRZ': 1}).sort('points', -1).limit(90) #Filtro de isBRZ = 1
 	return ranking
 
 def get_db_player_battlelog_data(tag):
