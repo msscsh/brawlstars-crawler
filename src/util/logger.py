@@ -14,3 +14,8 @@ def log_line_in_debug(line, isJson):
             log_line(f'DEBUG JSON :::\n {json.dumps(line, indent=2, ensure_ascii=False)}')
         else:
             log_line(f'DEBUG ::: {line}')
+
+
+def log_line_json(line, isJson):
+    if isJson:
+        log_line(f'JSON :::\n {json.dumps(line, indent=2, ensure_ascii=False)}')
