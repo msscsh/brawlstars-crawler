@@ -46,7 +46,6 @@ def identify_index_last_persisted_change(last_updated_battle_date, api_battles, 
     return index
 
 def scan_all_players_from_club(club_tag):
-    clear_players_from_club()
     clubBand = get_api_clubs(club_tag).get('name')[-1]
     members = get_api_clubs_members(club_tag).get('members')
     index = 0
@@ -108,6 +107,7 @@ elif len(sys.argv) > 3+offset_param:
     index = 1
     while index < len(sys.argv)-offset_param:
         club_tag = sys.argv[index]
+        clear_players_from_club()
         scan_all_players_from_club(club_tag)
         index += 1
 
