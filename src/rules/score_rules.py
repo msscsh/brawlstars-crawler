@@ -2,7 +2,7 @@ import os, sys
 
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
-from util.logger import log_line_in_debug
+from util.logger import log_line_in_debug, log_line_json
 from util.db.mongodb import increase_player_battelog_column
 
 def apply_general_battlelog_rules_into_players_score(tag, battle):
@@ -11,6 +11,11 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
 
 	if battle["event"]["id"] == 0:
 		increase_player_battelog_column(tag, 'mapMakerPlays', 1)
+
+	elif 'type' not in battle["battle"]:
+		log_line_json(battle, True)
+		if battle["battle"]["mode"] == "bigGame":
+			print('Big game encontrado')
 
 	elif  battle["battle"]["type"].lower() == "soloranked" or battle["battle"]["type"].lower() == "teamranked":
 		if battle["battle"]["result"] == "victory":
@@ -48,6 +53,23 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
 			increase_player_battelog_column(tag, 'points', 1)
 		if battle["battle"]["rank"] >= 3:
 			increase_player_battelog_column(tag, 'sdLosses', 1)
+
+	elif  battle["battle"]["mode"].lower() == "hunters":
+		if battle["battle"]["rank"] == 1:
+			increase_player_battelog_column(tag, 'hunterFistPlace', 1)
+			increase_player_battelog_column(tag, 'points', 1)
+		if battle["battle"]["rank"] == 2:
+			increase_player_battelog_column(tag, 'hunterSecondPlace', 1)
+			increase_player_battelog_column(tag, 'points', 1)
+		if battle["battle"]["rank"] == 3:
+			increase_player_battelog_column(tag, 'hunterThirdPlace', 1)
+			increase_player_battelog_column(tag, 'points', 1)
+		if battle["battle"]["rank"] == 4:
+			increase_player_battelog_column(tag, 'hunterFourthPlace', 1)
+			increase_player_battelog_column(tag, 'points', 1)
+		if battle["battle"]["rank"] >= 5:
+			increase_player_battelog_column(tag, 'hunterLosses', 1)
+
 	else:
 		if battle["battle"]["result"] == "victory":
 			increase_player_battelog_column(tag, 'ngWins', 1)
@@ -62,3 +84,6 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
 			if battle["battle"].get("starPlayer")['tag'][1:] == tag:
 				increase_player_battelog_column(tag, 'starPlayer', 1)
 				increase_player_battelog_column(tag, 'points', 2)
+
+	# else:
+	# 	log_line_json(battle, True)
