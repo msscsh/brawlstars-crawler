@@ -105,9 +105,9 @@ elif len(sys.argv) == 2+offset_param:
 elif len(sys.argv) > 3+offset_param:
     log_line('Loading group of clubs')
     index = 1
+    clear_players_from_club()
     while index < len(sys.argv)-offset_param:
         club_tag = sys.argv[index]
-        clear_players_from_club()
         scan_all_players_from_club(club_tag)
         index += 1
 

@@ -26,6 +26,7 @@ def sum_showdown_board(player):
 file = "ranking_player_battlelog"
 html = ""
 ranking = get_db_ranking_player_battlelog_data()
+rankingSize = 0
 for index, player in enumerate(ranking):
 
     oldPosition = 90
@@ -63,6 +64,13 @@ for index, player in enumerate(ranking):
     f"{write_value(strNormalGame)}"\
     f"{write_value(strPowerLeague)}"\
     '</tr>\n'
+
+    rankingSize += 1
+
+while rankingSize < 90:    
+    html += '\n'
+    rankingSize += 1
+
 
 write_player_in_ranking_html_file(html)
 
