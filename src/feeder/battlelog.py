@@ -52,6 +52,7 @@ def scan_all_players_from_club(club_tag):
     while index < len(members):
         log_line_in_debug(members[index], True)
         set_db_player_field_value(members[index]['tag'][1:], 'isBRZ', 1)
+        set_db_player_field_value(members[index]['tag'][1:], 'role', members[index].get('role'))
         print(f'Player {index} ')
         main(members[index]['tag'][1:], clubBand)
         index += 1
