@@ -63,6 +63,7 @@ for index, player in enumerate(ranking):
     f"{write_value(strShowdown)}"\
     f"{write_value(strNormalGame)}"\
     f"{write_value(strPowerLeague)}"\
+    f"{write_player_value(player, 'role')}"\
     '</tr>\n'
 
     rankingSize += 1
