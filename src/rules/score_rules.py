@@ -18,11 +18,11 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
 			print('Big game encontrado')
 
 	elif  battle["battle"]["type"].lower() == "soloranked" or battle["battle"]["type"].lower() == "teamranked":
-		if battle["battle"]["result"] == "victory":
-			increase_player_battelog_column(tag, 'plWins', 1)
-			increase_player_battelog_column(tag, 'points', 3)
-		if battle["battle"]["result"] == "defeat":
-			increase_player_battelog_column(tag, 'plLosses', 1)
+		# if battle["battle"]["result"] == "victory":
+		# 	increase_player_battelog_column(tag, 'plWins', 1)
+		# 	increase_player_battelog_column(tag, 'points', 3)
+		# if battle["battle"]["result"] == "defeat":
+		# 	increase_player_battelog_column(tag, 'plLosses', 1)
 		if battle["battle"].get("starPlayer") is not None:
 			if battle["battle"].get("starPlayer")['tag'][1:] == tag:
 				increase_player_battelog_column(tag, 'plStarPlayer', 1)
