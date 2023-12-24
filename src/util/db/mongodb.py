@@ -17,7 +17,7 @@ def set_db_player_field_value(tag, field, value):
 def get_db_ranking_player_battlelog_data():
 	log_line(f'Retriving ranking player battlelog')
 	collection = use_collection_battlelog()
-	ranking = collection.find({'isBRZ': 1}).sort('points', -1).limit(90) #Filtro de isBRZ = 1
+	ranking = collection.find({'isBRZ': 1}).sort('points', -1).limit(90)
 	return ranking
 
 def get_db_player_battlelog_data(tag):
