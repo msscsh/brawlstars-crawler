@@ -6,26 +6,21 @@ sys.path.append(project_path)
 from util.logger import log_line, log_line_in_debug
 from util.apis.brawlstars_api import get_api_clubs, get_api_clubs_members, get_api_players_battlelog_data_with_name
 from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data, set_db_player_field_value, clear_players_from_club
+from util.file_master import read_lines_from_file, remove_file, add_content_in_file
 from rules.score_rules import apply_general_battlelog_rules_into_players_score
 
 def reprocess_failed():
     tags_failed_again = []
-    file = 'failed_tag.log'
-    with open(file, 'r') as file_failed_tag:
-        for tag in file_failed_tag:
-            if not main(tag.strip(), None) :
-                if tag.strip() not in tags_failed_again:
-                    tags_failed_again = tags_failed_again + [tag.strip()]
+    file_path = 'failed_tag.log'
+    file_failed_tag = read_lines_from_file(file_path)
+    for tag in file_failed_tag:
+        if not main(tag.strip(), None) :
+            if tag.strip() not in tags_failed_again:
+                tags_failed_again = tags_failed_again + [tag.strip()]
 
-    try:
-        os.remove(file)
-        with open(file, 'w') as file_failed_tag:
-            for tag in tags_failed_again:
-                file_failed_tag.write(tag + '\n')
-    except FileNotFoundError:
-        print(f"Not found {file}.")
-    except Exception as e:
-        print(f"Error: {e}")
+    remove_file(file_path)
+    for tag in tags_failed_again:
+        add_content_in_file(file_path, tag + '\n')
 
 def count_all_player_score_from_battles(tag, battles):
     index = 0
