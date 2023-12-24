@@ -10,8 +10,11 @@ def audit(tag, battles):
 	count_normal_game_win = 0
 	count_normal_game_loss = 0
 	count_normal_game_draw = 0
-	count_pl_round_win = 0
-	count_pl_round_loss = 0
+
+	pl_object = {}
+	count_pl_win = 0
+	count_pl_loss = 0
+
 	count_showdown_win_1st = 0
 	count_showdown_win_2nd = 0
 	count_showdown_win_3th = 0
@@ -31,7 +34,6 @@ def audit(tag, battles):
 	duplicate_index = []
 
 	for index, battle in enumerate(battles):
-
 		if battle.get('battleTime') not in list_battles:
 		    list_battles.add(battle.get('battleTime'))
 		else:
@@ -46,11 +48,30 @@ def audit(tag, battles):
 				continue
 
 		elif  battle["battle"]["type"].lower() == "soloranked" or battle["battle"]["type"].lower() == "teamranked":
+
+			tags_team_0 = ''
+			for player_team_0 in battle["battle"].get("teams")[0]:
+				tags_team_0 = tags_team_0 + player_team_0.get('tag')
+
+			tags_team_1 = ''
+			for player_team_1 in battle["battle"].get("teams")[1]:
+				tags_team_1 = tags_team_1 + player_team_1.get('tag')
+
+			if pl_object.get('id') is not None and pl_object.get('id') != tags_team_0+tags_team_1:
+				if pl_object.get("countWin", 0) > pl_object.get("countLoss", 0):
+					count_pl_win += 1
+				else:
+					count_pl_loss += 1
+				points += pl_object.get("countWin", 0) * 3
+				pl_object = {"id": tags_team_0+tags_team_1, "countWin": 0, "countLoss": 0}
+			else:
+				pl_object = {"id": tags_team_0+tags_team_1, "countWin": pl_object.get("countWin", 0), "countLoss": pl_object.get("countLoss", 0)}
+
 			if battle["battle"]["result"] == "victory":
-				count_pl_round_win += 1
-				points += 3
-			if battle["battle"]["result"] == "defeat":
-				count_pl_round_loss += 1
+				pl_object = {"id": tags_team_0+tags_team_1, "countWin": pl_object.get("countWin", 0)+1, "countLoss": pl_object.get("countLoss", 0)}
+			elif battle["battle"]["result"] == "defeat":
+				pl_object = {"id": tags_team_0+tags_team_1, "countWin": pl_object.get("countWin", 0), "countLoss": pl_object.get("countLoss", 0)+1}
+
 			if battle["battle"].get("starPlayer") is not None:
 				if battle["battle"].get("starPlayer")['tag'][1:] == tag:
 					count_pl_starplayer += 1
@@ -116,8 +137,8 @@ def audit(tag, battles):
 	set_db_player_field_value(player.get('tag'), 'ngWins', count_normal_game_win)
 	set_db_player_field_value(player.get('tag'), 'ngLosses', count_normal_game_loss)
 	set_db_player_field_value(player.get('tag'), 'ngDraws', count_normal_game_draw)
-	set_db_player_field_value(player.get('tag'), 'plWins', count_pl_round_win)
-	set_db_player_field_value(player.get('tag'), 'plLosses', count_pl_round_loss)
+	set_db_player_field_value(player.get('tag'), 'plWins', count_pl_win)
+	set_db_player_field_value(player.get('tag'), 'plLosses', count_pl_loss)
 	set_db_player_field_value(player.get('tag'), 'sdFistPlace', count_showdown_win_1st)
 	set_db_player_field_value(player.get('tag'), 'sdSecondPlace', count_showdown_win_2nd)
 	set_db_player_field_value(player.get('tag'), 'sdThirdPlace', count_showdown_win_3th)
