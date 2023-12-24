@@ -4,7 +4,7 @@ project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
 
 from util.logger import log_line
-from util.db.mongodb import get_db_ranking_player_battlelog_data, set_db_player_field_value
+from util.db.mongodb import get_db_ranking_player_battlelog_data, set_db_player_field_value, increase_player_battelog_column
 
 def write_value(value):
     return f'<td>{value}</td>'
@@ -34,6 +34,12 @@ for index, player in enumerate(ranking):
         oldPosition = int(player.get('position'))
 
     set_db_player_field_value(player.get('tag'), 'position', index+1)
+
+    if oldPosition == index+1:
+        increase_player_battelog_column(player.get('tag'), 'maintainingPositionFor', 30)
+    else:
+        set_db_player_field_value(player.get('tag'), 'maintainingPositionFor', 0)
+
     emoji = ''
 
     if index+1 == 1:
