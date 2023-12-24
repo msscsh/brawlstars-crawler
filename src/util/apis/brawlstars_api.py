@@ -3,16 +3,12 @@ import os, sys, json, requests
 project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(project_path)
 from util.logger import log_line, log_line_in_debug
+from util.file_master import add_content_in_file, create_file_if_it_does_not_exists, read_line_from_file
 
 def add_tag_in_reprocess_file(tag):
     file_path = 'failed_tag.log'
-
-    if not os.path.exists(file_path):
-        with open(file_path, 'w') as new_file:
-            pass
-
-    with open(file_path, 'a') as failed_tag_file:
-        failed_tag_file.write(f'{tag}\n')
+    create_file_if_it_does_not_exists(file_path)
+    add_content_in_file(file_path, f'{tag}\n')
 
 def clean_columns_from_json(json_from_api, to_remove):
 	json_less = {key: value for key, value in json_from_api.items() if key not in to_remove}
@@ -37,27 +33,26 @@ def manipulate_json_before_return(json_data):
     return json_data;
 
 def do_request(url):
-	with open('api_key', 'r') as arquivo:
-	    api_key = arquivo.read()
-	    headers = {
-	        'Authorization': f'Bearer {api_key}'
-	    }
-	    response = requests.get(url, headers=headers)
-	    if response.status_code == 200:
-	    	return manipulate_json_before_return(response.json())
-	    if response.status_code == 404:
-	    	log_line(f'Error: 404 Not Found - {url}')
-	    	return None
-	    if response.status_code == 429:
-	    	log_line(f'Error: 429 Too many requests - {url}')
-	    	log_line(f'Aborting application')
-	    	quit()
-	    if response.status_code == 500:
-	    	log_line(f'Error: 500 Internal Server Error - {url}')
-	    	return response.json()
-	    else:
-	    	log_line(f'Error: {response.status_code} headers: {response.headers}')
-	    	return None
+	api_key = read_line_from_file('api_key')
+    headers = {
+        'Authorization': f'Bearer {api_key}'
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+    	return manipulate_json_before_return(response.json())
+    if response.status_code == 404:
+    	log_line(f'Error: 404 Not Found - {url}')
+    	return None
+    if response.status_code == 429:
+    	log_line(f'Error: 429 Too many requests - {url}')
+    	log_line(f'Aborting application')
+    	quit()
+    if response.status_code == 500:
+    	log_line(f'Error: 500 Internal Server Error - {url}')
+    	return response.json()
+    else:
+    	log_line(f'Error: {response.status_code} headers: {response.headers}')
+    	return None
 
 def get_api_players_data(tag):
 	url = f'{base_url_players}{tag}'

@@ -5,6 +5,7 @@ sys.path.append(project_path)
 from util.logger import log_line
 from util.apis.brawlstars_api import get_api_players_data, get_api_players_battlelog_data
 from util.db.mongodb import get_db_player_battlelog_data
+from util.file_master import create_file_if_it_does_not_exists, add_content_in_file
 
 def get_players_trophy_count(tag):
     player = get_api_players_data(tag)
@@ -24,18 +25,15 @@ def get_tags_in_this_match(player_battlelog_battles):
 
 def add_tag_to_controll_file(tag):
     file_path = 'hunted_player_tags.log'
-    if not os.path.exists(file_path):
-        with open(file_path, 'w') as novo_arquivo:
-            pass
-    with open(file_path, 'a') as hunted_file:
-        hunted_file.write(f'{tag}\n')
+    create_file_if_it_does_not_exists(file_path)
+    add_content_in_file(file_path, f'{tag}\n')
 
 def recursively_hunt_players(tag, deep):
     if deep >= 0:            
         trophies = get_players_trophy_count(tag)
         print(f'Player({tag}) trophies is {trophies} in deep {deep}')
 
-        if trophies >= 50000 or tag == "2QPVJ099C":
+        if trophies >= 50000:
 
             add_tag_to_controll_file(tag)
             player_battlelog_battles = []
