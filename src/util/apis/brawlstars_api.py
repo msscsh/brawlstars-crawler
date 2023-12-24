@@ -34,25 +34,25 @@ def manipulate_json_before_return(json_data):
 
 def do_request(url):
 	api_key = read_line_from_file('api_key')
-    headers = {
-        'Authorization': f'Bearer {api_key}'
-    }
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-    	return manipulate_json_before_return(response.json())
-    if response.status_code == 404:
-    	log_line(f'Error: 404 Not Found - {url}')
-    	return None
-    if response.status_code == 429:
-    	log_line(f'Error: 429 Too many requests - {url}')
-    	log_line(f'Aborting application')
-    	quit()
-    if response.status_code == 500:
-    	log_line(f'Error: 500 Internal Server Error - {url}')
-    	return response.json()
-    else:
-    	log_line(f'Error: {response.status_code} headers: {response.headers}')
-    	return None
+	headers = {
+    	'Authorization': f'Bearer {api_key}'
+	}
+	response = requests.get(url, headers=headers)
+	if response.status_code == 200:
+		return manipulate_json_before_return(response.json())
+	if response.status_code == 404:
+		log_line(f'Error: 404 Not Found - {url}')
+		return None
+	if response.status_code == 429:
+		log_line(f'Error: 429 Too many requests - {url}')
+		log_line(f'Aborting application')
+		quit()
+	if response.status_code == 500:
+		log_line(f'Error: 500 Internal Server Error - {url}')
+		return response.json()
+	else:
+		log_line(f'Error: {response.status_code} headers: {response.headers}')
+		return None
 
 def get_api_players_data(tag):
 	url = f'{base_url_players}{tag}'
