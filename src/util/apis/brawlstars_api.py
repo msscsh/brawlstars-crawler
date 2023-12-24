@@ -51,7 +51,7 @@ def do_request(url):
 	    if response.status_code == 429:
 	    	log_line(f'Error: 429 Too many requests - {url}')
 	    	log_line(f'Aborting application')
-	    	quit() #Retry will not change this cenario. Stop trying until fix 
+	    	quit()
 	    if response.status_code == 500:
 	    	log_line(f'Error: 500 Internal Server Error - {url}')
 	    	return response.json()
