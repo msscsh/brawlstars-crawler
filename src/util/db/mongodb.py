@@ -1,5 +1,6 @@
 import os, sys
 from pymongo import MongoClient
+from datetime import datetime
 
 project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(project_path)
@@ -29,6 +30,7 @@ def get_db_player_battlelog_data(tag):
 def insert_db_player_battlelog_data(tag, api_player_battlelog):
     log_line(f'Inserting player with battlelog')
     collection = use_collection_battlelog()
+    api_player_battlelog['created_at'] = datetime.now()
     result = collection.insert_one(api_player_battlelog)	
 
 def update_db_player_battlelog_data(tag, api_player_battlelog_battles):
