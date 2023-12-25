@@ -11,7 +11,7 @@ def clear_players_from_club():
 	collection.update_many({}, {'$set': {'isBRZ': 0}})
 
 def set_db_player_field_value(tag, field, value):
-	log_line(f'Setting players field {field} with {value}')
+	log_line(f'Setting players({tag}) field {field}')
 	collection = use_collection_battlelog()
 	result = collection.update_one({'tag': tag}, {'$set': {f'{field}': value }})
 
@@ -34,7 +34,7 @@ def insert_db_player_battlelog_data(tag, api_player_battlelog):
     result = collection.insert_one(api_player_battlelog)	
 
 def update_db_player_battlelog_data(tag, api_player_battlelog_battles):
-    log_line(f'Updating {len(api_player_battlelog_battles)} battlelog battle(s) for player {tag}')
+    log_line(f'Updating {len(api_player_battlelog_battles)} battlelog battle(s) for player({tag})')
     collection = use_collection_battlelog()
     result = collection.update_one({'tag': tag}, {'$push': {'battles': {  '$each': api_player_battlelog_battles, '$position': 0 }}})
 
