@@ -28,7 +28,6 @@ html = ""
 ranking = get_db_ranking_player_battlelog_data()
 rankingSize = 0
 for index, player in enumerate(ranking):
-
     oldPosition = 90
     if player.get('position'):
         oldPosition = int(player.get('position'))
