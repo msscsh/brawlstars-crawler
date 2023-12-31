@@ -5,9 +5,19 @@ sys.path.append(project_path)
 
 from util.logger import log_line, log_line_in_debug
 from util.apis.brawlstars_api import get_api_clubs, get_api_clubs_members, get_api_players_battlelog_data_with_name
-from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data, set_db_player_field_value, clear_players_from_club
+from util.db.mongodb import get_db_player_battlelog_data, insert_db_player_battlelog_data, update_db_player_battlelog_data, set_db_player_field_value, clear_players_from_club, clear_monitored_players
 from util.file_master import read_lines_from_file, remove_file, add_content_in_file
 from rules.score_rules import apply_general_battlelog_rules_into_players_score
+
+def monitored_players():
+    tags_failed_again = []
+    file_path = 'monitored_players.log'
+    file_failed_tag = read_lines_from_file(file_path)
+    clear_monitored_players()
+    for tag in file_failed_tag:
+        print(f'Monitoring player({tag}) ')
+        main(tag.strip(), None)
+        set_db_player_field_value(tag, 'isMonitored', 1)
 
 def reprocess_failed():
     tags_failed_again = []
@@ -64,13 +74,13 @@ def main(tag, clubBand):
         db_player_battlelog = get_db_player_battlelog_data(tag)
         if not db_player_battlelog:
             insert_db_player_battlelog_data(tag, api_player_battlelog)
-            count_all_player_score_from_battles(tag, api_player_battlelog.get('battles', []))
+            # count_all_player_score_from_battles(tag, api_player_battlelog.get('battles', []))
         else:
             last_updated_battle_date = db_player_battlelog.get('battles', [])[0]['battleTime']
             api_battles = api_player_battlelog.get('battles', [])
             cut = identify_index_last_persisted_change(last_updated_battle_date, api_battles, tag)
             update_db_player_battlelog_data(tag, api_battles[:cut])
-            count_all_player_score_from_battles(tag, api_battles[:cut])
+            # count_all_player_score_from_battles(tag, api_battles[:cut])
         return True
 
     else:
@@ -84,6 +94,10 @@ if 'debug' in sys.argv:
 if 'reprocess_failed' in sys.argv:
     log_line(f'Init "reprocess_failed"')
     reprocess_failed()
+
+if 'monitored_players' in sys.argv:
+    log_line(f'Init "monitored_players"')
+    monitored_players()
 
 #Club tag
 elif len(sys.argv) < 2+offset_param:
