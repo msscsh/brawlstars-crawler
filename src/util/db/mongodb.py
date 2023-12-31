@@ -6,6 +6,10 @@ project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 sys.path.append(project_path)
 from util.logger import log_line, log_line_in_debug
 
+def clear_monitored_players():
+	collection = use_collection_battlelog()
+	collection.update_many({}, {'$set': {'isMonitored': 0}})
+	
 def clear_players_from_club():
 	collection = use_collection_battlelog()
 	collection.update_many({}, {'$set': {'isBRZ': 0}})
