@@ -15,9 +15,9 @@ def monitored_players():
     file_failed_tag = read_lines_from_file(file_path)
     clear_monitored_players()
     for tag in file_failed_tag:
-        print(f'Monitoring player({tag}) ')
+        print(f'Monitoring player({tag.strip()}) ')
         main(tag.strip(), None)
-        set_db_player_field_value(tag, 'isMonitored', 1)
+        set_db_player_field_value(tag.strip(), 'isMonitored', 1)
 
 def reprocess_failed():
     tags_failed_again = []
@@ -74,13 +74,15 @@ def main(tag, clubBand):
         db_player_battlelog = get_db_player_battlelog_data(tag)
         if not db_player_battlelog:
             insert_db_player_battlelog_data(tag, api_player_battlelog)
-            # count_all_player_score_from_battles(tag, api_player_battlelog.get('battles', []))
         else:
-            last_updated_battle_date = db_player_battlelog.get('battles', [])[0]['battleTime']
+            db_battles = db_player_battlelog.get('battles', [])
             api_battles = api_player_battlelog.get('battles', [])
-            cut = identify_index_last_persisted_change(last_updated_battle_date, api_battles, tag)
-            update_db_player_battlelog_data(tag, api_battles[:cut])
-            # count_all_player_score_from_battles(tag, api_battles[:cut])
+            if len(db_battles) > 0:
+                last_updated_battle_date = db_battles[0]['battleTime']
+                cut = identify_index_last_persisted_change(last_updated_battle_date, api_battles, tag)
+                update_db_player_battlelog_data(tag, api_battles[:cut])
+            else:
+                update_db_player_battlelog_data(tag, api_battles)
         return True
 
     else:
