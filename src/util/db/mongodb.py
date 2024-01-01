@@ -9,6 +9,7 @@ from util.logger import log_line, log_line_in_debug
 def clear_monitored_players():
 	collection = use_collection_battlelog()
 	collection.update_many({}, {'$set': {'isMonitored': 0}})
+	# collection.update_many({}, {"$unset": {"battles": []}})
 	
 def clear_players_from_club():
 	collection = use_collection_battlelog()
