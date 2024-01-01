@@ -40,6 +40,9 @@ def do_request(url):
 	response = requests.get(url, headers=headers)
 	if response.status_code == 200:
 		return manipulate_json_before_return(response.json())
+	if response.status_code == 403:
+		log_line(f'Error: 403 Forbiden - {url}')
+		quit()
 	if response.status_code == 404:
 		log_line(f'Error: 404 Not Found - {url}')
 		return None
@@ -146,7 +149,7 @@ def main(tag):
 	# json_less = get_api_players_battlelog_data(tag)
 
 	# json_less = get_api_clubs(tag)
-	json_less = get_api_clubs_members(tag)
+	# json_less = get_api_clubs_members(tag)
 
 	# json_less = get_api_rankings_countrycode_powerplay_seasons('global')
 	# json_less = get_api_rankings_countrycode_powerplay_seasons_seasonsid('global', 57)
