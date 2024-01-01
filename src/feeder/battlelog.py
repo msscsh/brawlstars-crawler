@@ -15,7 +15,7 @@ def monitored_players():
     file_failed_tag = read_lines_from_file(file_path)
     clear_monitored_players()
     for tag in file_failed_tag:
-        print(f'Monitoring player({tag.strip()}) ')
+        log_line(f'Monitoring player({tag.strip()}) ')
         main(tag.strip(), None)
         set_db_player_field_value(tag.strip(), 'isMonitored', 1)
 
@@ -58,7 +58,7 @@ def scan_all_players_from_club(club_tag):
         log_line_in_debug(members[index], True)
         set_db_player_field_value(members[index]['tag'][1:], 'isBRZ', 1)
         set_db_player_field_value(members[index]['tag'][1:], 'role', members[index].get('role'))
-        print(f'Player({members[index]["tag"][1:]}) {index} ')
+        log_line(f'Player({members[index]["tag"][1:]}) {index} ')
         main(members[index]['tag'][1:], clubBand)
         index += 1
 
