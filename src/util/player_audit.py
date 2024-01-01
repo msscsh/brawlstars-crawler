@@ -1,4 +1,5 @@
 import os, sys
+from datetime import datetime
 
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
@@ -39,6 +40,12 @@ def audit(tag, battles):
 		else:
 			duplicate_index.append(index)
 			continue
+
+		battle_time = datetime.strptime(battle.get('battleTime').replace('Z', ''), "%Y%m%dT%H%M%S.%f")
+
+		#2024 only allowed
+		if battle_time.year < 2024:
+		    continue
 
 		if battle["event"]["id"] == 0:
 			count_mapmaker += 1
@@ -164,7 +171,9 @@ def remove_duplicate_index(duplicate_index, battles):
 
 players = get_db_ranking_player_battlelog_data()
 for index, player in enumerate(players):
-	print(f'player({player.get("tag")}) with {len(player.get("battles"))} battles')
-	duplicate_index = audit(player.get("tag"), player.get('battles'))
-	final_battles = remove_duplicate_index(duplicate_index, player.get('battles'))
-	set_db_player_field_value(player.get('tag'), 'battles', final_battles)
+	#No battles, nothing to do
+	if player.get("battles"):
+		print(f'player({player.get("tag")}) with {len(player.get("battles"))} battles')
+		duplicate_index = audit(player.get("tag"), player.get('battles'))
+		final_battles = remove_duplicate_index(duplicate_index, player.get('battles'))
+		set_db_player_field_value(player.get('tag'), 'battles', final_battles)
