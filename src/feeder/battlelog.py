@@ -83,6 +83,7 @@ def main(tag, clubBand):
                 update_db_player_battlelog_data(tag, api_battles[:cut])
             else:
                 update_db_player_battlelog_data(tag, api_battles)
+            set_db_player_field_value(tag, 'name', api_player_battlelog['name'])
         return True
 
     else:
