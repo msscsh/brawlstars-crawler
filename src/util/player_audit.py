@@ -125,8 +125,8 @@ def audit(tag, battles):
 				points += 1
 			if battle["battle"]["rank"] >= 5:
 				count_hunter_loss += 1
-
-		else:
+				
+		elif 'trophyChange' in battle["battle"]:
 			if battle["battle"]["result"] == "victory":
 				count_normal_game_win += 1
 				points += 2

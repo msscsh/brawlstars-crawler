@@ -13,9 +13,11 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
 		increase_player_battelog_column(tag, 'mapMakerPlays', 1)
 
 	elif 'type' not in battle["battle"]:
-		log_line_json(battle, True)
 		if battle["battle"]["mode"] == "bigGame":
 			print('Big game encontrado')
+		else
+			log_line_json(battle, True)
+			print(f"Other mode to include: {battle['battle']['mode']}")
 
 	elif  battle["battle"]["type"].lower() == "soloranked" or battle["battle"]["type"].lower() == "teamranked":
 		# if battle["battle"]["result"] == "victory":
@@ -70,7 +72,7 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
 		if battle["battle"]["rank"] >= 5:
 			increase_player_battelog_column(tag, 'hunterLosses', 1)
 
-	else:
+	elif 'trophyChange' in battle["battle"]:
 		if battle["battle"]["result"] == "victory":
 			increase_player_battelog_column(tag, 'ngWins', 1)
 			increase_player_battelog_column(tag, 'points', 2)
@@ -84,6 +86,5 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
 			if battle["battle"].get("starPlayer")['tag'][1:] == tag:
 				increase_player_battelog_column(tag, 'starPlayer', 1)
 				increase_player_battelog_column(tag, 'points', 2)
-
-	# else:
-	# 	log_line_json(battle, True)
+	else:
+		log_line_json(battle, True)
