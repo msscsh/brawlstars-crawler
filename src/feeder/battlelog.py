@@ -63,8 +63,8 @@ def scan_all_players_from_club(club_tag):
         index += 1
 
 def main(tag, clubBand):
-    log_line(f'Begin with tag: {tag}')
     api_player_battlelog = get_api_players_battlelog_data_with_name(tag)
+    log_line(f'Begin with player: {api_player_battlelog['name']}')
     log_line_in_debug(api_player_battlelog, True)
 
     if api_player_battlelog:
