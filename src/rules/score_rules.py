@@ -15,7 +15,7 @@ def apply_general_battlelog_rules_into_players_score(tag, battle):
 	elif 'type' not in battle["battle"]:
 		if battle["battle"]["mode"] == "bigGame":
 			print('Big game encontrado')
-		else
+		else:
 			log_line_json(battle, True)
 			print(f"Other mode to include: {battle['battle']['mode']}")
 
