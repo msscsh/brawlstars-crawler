@@ -2,7 +2,7 @@ import os, sys, json, requests
 
 project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(project_path)
-from util.logger import log_line, log_line_in_debug
+from util.logger import log_line, log_error_line, log_line_in_debug
 from util.file_master import add_content_in_file, create_file_if_it_does_not_exists, read_line_from_file
 
 def add_tag_in_reprocess_file(tag):
@@ -41,20 +41,20 @@ def do_request(url):
 	if response.status_code == 200:
 		return manipulate_json_before_return(response.json())
 	if response.status_code == 403:
-		log_line(f'Error: 403 Forbiden - {url}')
+		log_error_line(f'Error: 403 Forbiden - {url}')
 		quit()
 	if response.status_code == 404:
-		log_line(f'Error: 404 Not Found - {url}')
+		log_error_line(f'Error: 404 Not Found - {url}')
 		return None
 	if response.status_code == 429:
-		log_line(f'Error: 429 Too many requests - {url}')
-		log_line(f'Aborting application')
+		log_error_line(f'Error: 429 Too many requests - {url}')
+		log_error_line(f'Aborting application')
 		quit()
 	if response.status_code == 500:
-		log_line(f'Error: 500 Internal Server Error - {url}')
+		log_error_line(f'Error: 500 Internal Server Error - {url}')
 		return response.json()
 	else:
-		log_line(f'Error: {response.status_code} headers: {response.headers}')
+		log_error_line(f'Error: {response.status_code} headers: {response.headers}')
 		return None
 
 def get_api_players_data(tag):

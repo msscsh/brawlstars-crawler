@@ -4,7 +4,12 @@ from datetime import datetime
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_path)
 
-from util.file_master import add_content_in_file
+from util.file_master import add_content_in_file, rewrite_file_with_content
+
+def log_error_line(line):
+    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    dated_line = f'{now} : {line}\n'
+    rewrite_file_with_content('python-error.log', dated_line)
 
 def log_line(line):
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
