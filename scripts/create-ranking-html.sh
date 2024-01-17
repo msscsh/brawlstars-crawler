@@ -2,8 +2,24 @@
 if [ -z "$1" ]; then
   echo "Must pass site home arg."
   exit 1
-else
-  echo "1: $1"
+fi
+
+if [ -z "$2" ]; then
+  echo "Must pass auto commiter info. [AUTO_GIT_USERNAME]"
+  exit 1
+fi
+if [ -z "$3" ]; then
+  echo "Must pass auto commiter info. [AUTO_GIT_EMAIL]"
+  exit 1
+fi
+
+if [ -z "$4" ]; then
+  echo "Must pass auto commiter info. [GIT_USERNAME]"
+  exit 1
+fi
+if [ -z "$5" ]; then
+  echo "Must pass auto commiter info. [GIT_EMAIL]"
+  exit 1
 fi
 
 python3 src/util/html_generator.py 
@@ -18,13 +34,13 @@ mv -f index-aux.html index.html
 
 git status >> $BS_CRAWLER_HOME/init.log
 git config commit.gpgsign false
-git config user.name ${AUTO_GIT_USERNAME}
-git config user.email ${AUTO_GIT_EMAIL}
+git config user.name ${2}
+git config user.email ${3}
 git add index.html ranking.html
 git commit -m "[auto] atualização de placar"
 git push
-git config user.name ${GIT_USERNAME}
-git config user.email ${GIT_EMAIL}
+git config user.name ${4}
+git config user.email ${5}
 git config commit.gpgsign true
 git config --unset user.name
 git config --unset user.email
