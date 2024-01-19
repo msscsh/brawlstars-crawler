@@ -1,5 +1,7 @@
 #!/bin/bash
 
+EXTERNAL_IP=curl -sS https://api.ipify.org
+
 if [ -z "$BS_EMAIL" ] || [ -z "$BS_PASSWORD" ] || [ -z "$EXTERNAL_IP" ]; then
   echo "Error: Environment variables BS_EMAIL, BS_PASSWORD and EXTERNAL_IP must be defined."
   exit 1
