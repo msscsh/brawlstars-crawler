@@ -139,7 +139,7 @@ def audit(tag, battles):
 					count_starplayer += 1
 					points += 2
 
-			if len(battle["battle"]["teams"][0]) == 3
+			if len(battle["battle"]["teams"][0]) == 3:
 				if battle["battle"]["result"] == "victory":
 					count_normal_game_win += 1
 					points += 2
@@ -148,7 +148,7 @@ def audit(tag, battles):
 				if battle["battle"]["result"] == "draw":
 					count_normal_game_draw += 1
 
-			if len(battle["battle"]["teams"][0]) == 5
+			if len(battle["battle"]["teams"][0]) == 5:
 				if battle["battle"]["result"] == "victory":
 					count_5v5_game_win += 1
 					points += 2
