@@ -12,6 +12,10 @@ def audit(tag, battles):
 	count_normal_game_loss = 0
 	count_normal_game_draw = 0
 
+	count_5v5_game_win = 0
+	count_5v5_game_loss = 0
+	count_5v5_game_draw = 0
+
 	pl_object = {}
 	count_pl_win = 0
 	count_pl_loss = 0
@@ -126,20 +130,32 @@ def audit(tag, battles):
 			if battle["battle"]["rank"] >= 5:
 				count_hunter_loss += 1
 				
-		elif 'trophyChange' in battle["battle"]:
-			if battle["battle"]["result"] == "victory":
-				count_normal_game_win += 1
-				points += 2
-			if battle["battle"]["result"] == "defeat":
-				count_normal_game_loss += 1
-			if battle["battle"]["result"] == "draw":
-				count_normal_game_draw += 1
+		elif 'trophyChange' in battle["battle"]:	
+
 			if battle["battle"].get("duration"):
 				count_ng_duration += battle["battle"].get("duration")
 			if battle["battle"].get("starPlayer") is not None:
 				if battle["battle"].get("starPlayer")['tag'][1:] == tag:
 					count_starplayer += 1
 					points += 2
+
+			if len(battle["battle"]["teams"][0]) == 3
+				if battle["battle"]["result"] == "victory":
+					count_normal_game_win += 1
+					points += 2
+				if battle["battle"]["result"] == "defeat":
+					count_normal_game_loss += 1
+				if battle["battle"]["result"] == "draw":
+					count_normal_game_draw += 1
+
+			if len(battle["battle"]["teams"][0]) == 5
+				if battle["battle"]["result"] == "victory":
+					count_5v5_game_win += 1
+					points += 2
+				if battle["battle"]["result"] == "defeat":
+					count_5v5_game_loss += 1
+				if battle["battle"]["result"] == "draw":
+					count_5v5_game_draw += 1
 
 	set_db_player_field_value(player.get('tag'), 'ngWins', count_normal_game_win)
 	set_db_player_field_value(player.get('tag'), 'ngLosses', count_normal_game_loss)
