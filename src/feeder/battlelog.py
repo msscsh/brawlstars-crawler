@@ -64,10 +64,11 @@ def scan_all_players_from_club(club_tag):
 
 def main(tag, clubBand):
     api_player_battlelog = get_api_players_battlelog_data_with_name(tag)
-    log_line(f'Begin with player: {api_player_battlelog["name"]}')
-    log_line_in_debug(api_player_battlelog, True)
 
     if api_player_battlelog:
+        log_line(f'Begin with player: {api_player_battlelog["name"]}')
+        log_line_in_debug(api_player_battlelog, True)
+
         if clubBand:
             api_player_battlelog = {'clubBand': clubBand, **api_player_battlelog}
 
@@ -87,7 +88,7 @@ def main(tag, clubBand):
         return True
 
     else:
-        log_line(f'Failed getting data from API:{tag}')
+        log_line(f'Failed getting player data from API:{tag}')
         return False
 
 offset_param = 0
